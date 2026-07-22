@@ -13,120 +13,60 @@ box-sizing:border-box;
 font-family:Arial,Helvetica,sans-serif;
 }
 
-body{
-background:#0f0f0f;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-}
-
-.card{
-width:95%;
-max-width:420px;
-background:#1b1b1b;
-padding:25px;
-border-radius:18px;
-box-shadow:0 0 25px rgba(0,0,0,.4);
-}
-
-h1{
-text-align:center;
-margin-bottom:10px;
-}
-
-p{
-text-align:center;
-color:#bdbdbd;
-margin-bottom:20px;
-}
-
-input[type=file]{
-width:100%;
-margin-bottom:20px;
-}
-
-textarea{
-width:100%;
-height:90px;
-background:#2a2a2a;
-border:none;
-color:white;
-padding:12px;
-border-radius:10px;
-resize:none;
-margin-bottom:20px;
-}
-
-button{
-width:100%;
-padding:15px;
-background:#00c8ff;
-border:none;
-color:white;
-font-size:18px;
-border-radius:10px;
-cursor:pointer;
-}
-
-button:hover{
-opacity:.9;
-}
-
-#preview{
-margin-top:20px;
-text-align:center;
-}
-
-#preview img{
-max-width:100%;
-border-radius:12px;
-}
-</style>
-
-</head>
-
 <body>
 
 <div class="card">
 
 <h1>🖤 Xua Tattoo AI</h1>
 
-<p>Tu asistente inteligente para tatuajes</p>
+<p>Asistente IA para tatuadores</p>
 
-<input type="file" id="image">
+<input type="file" id="image" accept="image/*">
 
-<textarea placeholder="Ejemplo: Saca el esténcil con líneas gruesas y puntillismo"></textarea>
+<img id="preview" style="display:none;width:100%;margin-top:15px;border-radius:10px;">
 
-<button onclick="previewImage()">Procesar</button>
+<textarea id="prompt"
+placeholder="Ejemplo:
+• Saca el esténcil
+• Engrosa las líneas
+• Convierte las sombras a puntillismo"></textarea>
 
-<div id="preview"></div>
+<button onclick="previewImage()">Vista previa</button>
+
+<button>Sacar esténcil</button>
+
+<button>Engrosar líneas</button>
+
+<button>Puntillismo</button>
+
+<button>Mejorar calidad</button>
 
 </div>
 
 <script>
+
 function previewImage(){
 
-let file=document.getElementById("image").files[0];
+const file=document.getElementById("image").files[0];
 
-if(!file){
-alert("Selecciona una imagen");
-return;
-}
+if(!file) return;
 
-let reader=new FileReader();
+const reader=new FileReader();
 
 reader.onload=function(e){
 
-document.getElementById("preview").innerHTML=
-"<h3>Vista previa</h3><br><img src='"+e.target.result+"'>";
+const img=document.getElementById("preview");
+
+img.src=e.target.result;
+
+img.style.display="block";
 
 }
 
 reader.readAsDataURL(file);
 
 }
+
 </script>
 
 </body>
