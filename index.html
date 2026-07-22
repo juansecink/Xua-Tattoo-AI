@@ -3,82 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Xua Tattoo AI</title>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:#111;
-  color:white;
-  text-align:center;
-}
 
-header{
-  padding:20px;
+body{
+background:#0b0b0b;
+color:white;
+font-family:Arial;
+text-align:center;
+padding:20px;
 }
 
 h1{
-  font-size:32px;
+font-size:35px;
 }
 
-.container{
-  padding:20px;
-}
-
-input,button{
-  margin:10px;
-  padding:12px;
-  border-radius:8px;
-  border:none;
+.box{
+background:#1b1b1b;
+padding:20px;
+border-radius:15px;
+max-width:500px;
+margin:auto;
 }
 
 button{
-  background:white;
-  color:black;
-  font-weight:bold;
-  cursor:pointer;
+background:white;
+color:black;
+border:0;
+padding:14px;
+margin:8px;
+border-radius:10px;
+font-weight:bold;
+}
+
+input{
+margin:15px;
 }
 
 canvas{
-  display:none;
+display:none;
 }
 
-#preview{
-  max-width:90%;
-  margin-top:20px;
-  border:2px solid white;
+img{
+max-width:95%;
+margin-top:20px;
+border:2px solid white;
 }
+
+label{
+display:block;
+margin-top:15px;
+}
+
 </style>
 
 </head>
 
+
 <body>
 
-<header>
 <h1>🔥 Xua Tattoo AI 🔥</h1>
-<p>Generador de esténciles para tatuajes</p>
-</header>
 
-<div class="container">
+<div class="box">
+
+<p>Generador profesional de esténcil para tatuajes</p>
+
 
 <input type="file" id="upload" accept="image/*">
 
+
+<label>
+Oscurecer líneas:
+<input type="range" id="dark" min="0" max="255" value="120">
+</label>
+
+
+<label>
+Puntos de sombra:
+<input type="range" id="dots" min="0" max="10" value="4">
+</label>
+
+
 <br>
 
-<button onclick="createStencil()">
-Crear Esténcil
+
+<button onclick="crearStencil()">
+CREAR ESTÉNCIL
 </button>
 
-<br>
 
-<img id="preview">
-
-<br>
-
-<button onclick="downloadImage()">
-Descargar Esténcil
+<button onclick="descargar()">
+DESCARGAR PNG
 </button>
+
+
+<img id="resultado">
+
 
 </div>
 
@@ -86,99 +108,179 @@ Descargar Esténcil
 <canvas id="canvas"></canvas>
 
 
+
 <script>
 
+let imagen=new Image();
+
 let canvas=document.getElementById("canvas");
+
 let ctx=canvas.getContext("2d");
 
-let img=document.getElementById("preview");
+let resultado=document.getElementById("resultado");
+
 
 
 document.getElementById("upload").onchange=function(e){
 
-let file=e.target.files[0];
+let archivo=e.target.files[0];
 
-let reader=new FileReader();
+let lector=new FileReader();
 
-reader.onload=function(event){
 
-img.src=event.target.result;
+lector.onload=function(){
+
+imagen.onload=function(){
+
+resultado.src=imagen.src;
 
 }
 
-reader.readAsDataURL(file);
+
+imagen.src=lector.result;
+
+}
+
+
+lector.readAsDataURL(archivo);
 
 }
 
 
 
-function createStencil(){
 
-img.onload=function(){
 
-canvas.width=img.width;
-canvas.height=img.height;
+function crearStencil(){
 
-ctx.drawImage(img,0,0);
 
-let data=ctx.getImageData(
+canvas.width=imagen.width;
+
+canvas.height=imagen.height;
+
+
+ctx.drawImage(imagen,0,0);
+
+
+
+let datos=ctx.getImageData(
 0,
 0,
 canvas.width,
 canvas.height
 );
 
-for(let i=0;i<data.data.length;i+=4){
-
-let avg=
-(data.data[i]+
-data.data[i+1]+
-data.data[i+2])/3;
 
 
-let value=avg<150?0:255;
+let intensidad=
+document.getElementById("dark").value;
 
 
-data.data[i]=value;
-data.data[i+1]=value;
-data.data[i+2]=value;
+
+for(let i=0;i<datos.data.length;i+=4){
+
+
+let brillo=
+(datos.data[i]+datos.data[i+1]+datos.data[i+2])/3;
+
+
+
+if(brillo<intensidad){
+
+datos.data[i]=0;
+datos.data[i+1]=0;
+datos.data[i+2]=0;
+
+}else{
+
+datos.data[i]=255;
+datos.data[i+1]=255;
+datos.data[i+2]=255;
 
 }
 
-ctx.putImageData(data,0,0);
-
-showResult();
-
-}
-
-}
-
-
-
-function showResult(){
-
-img.src=canvas.toDataURL();
-
-img.style.display="block";
 
 }
 
 
 
-function downloadImage(){
+ctx.putImageData(datos,0,0);
 
-let link=document.createElement("a");
 
-link.download="Xua_Tattoo_AI_Estencil.png";
 
-link.href=canvas.toDataURL();
+crearPuntos();
 
-link.click();
+
+
+resultado.src=canvas.toDataURL();
+
+}
+
+
+
+
+
+function crearPuntos(){
+
+
+let cantidad=
+document.getElementById("dots").value;
+
+
+ctx.fillStyle="black";
+
+
+for(let y=0;y<canvas.height;y+=20){
+
+
+for(let x=0;x<canvas.width;x+=20){
+
+
+if(Math.random()<cantidad/20){
+
+ctx.beginPath();
+
+ctx.arc(
+x,
+y,
+2,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+
+}
+
+
+}
+
+
+}
+
+
+}
+
+
+
+
+function descargar(){
+
+
+let enlace=document.createElement("a");
+
+enlace.download="Xua_Tattoo_AI_Estencil.png";
+
+enlace.href=canvas.toDataURL();
+
+enlace.click();
+
 
 }
 
 
 </script>
+
 
 </body>
 </html>
