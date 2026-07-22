@@ -116,3 +116,222 @@ Ejemplo:
 <button onclick="previewImage()">👁 Vista previa</button>
 
 <button onclick="stencil()">✏️ Crear esténcil</button>
+<button onclick="thickenLines()">🖤 Engrosar líneas</button>
+
+<button onclick="dotwork()">⚫ Puntillismo</button>
+
+<button onclick="contrast()">🔥 Mejorar contraste</button>
+
+<button onclick="downloadImage()">📥 Guardar diseño</button>
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+</div>
+
+
+<script>
+
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+
+
+function previewImage(){
+
+const file=document.getElementById("image").files[0];
+
+if(!file) return;
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+const img=document.getElementById("preview");
+
+img.src=e.target.result;
+img.style.display="block";
+
+}
+
+reader.readAsDataURL(file);
+
+}
+
+
+
+function loadCanvas(){
+
+const img=document.getElementById("preview");
+
+canvas.width=img.naturalWidth;
+canvas.height=img.naturalHeight;
+
+ctx.drawImage(img,0,0);
+
+}
+
+
+
+function stencil(){
+
+loadCanvas();
+
+let imageData=ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+let data=imageData.data;
+
+
+for(let i=0;i<data.length;i+=4){
+
+let avg=(data[i]+data[i+1]+data[i+2])/3;
+
+
+if(avg<160){
+
+data[i]=0;
+data[i+1]=0;
+data[i+2]=0;
+
+}else{
+
+data[i]=255;
+data[i+1]=255;
+data[i+2]=255;
+
+}
+
+}
+
+
+ctx.putImageData(imageData,0,0);
+
+
+showResult();
+
+}
+
+
+
+function thickenLines(){
+
+loadCanvas();
+
+ctx.filter="contrast(250%)";
+
+ctx.drawImage(
+canvas,
+0,
+0
+);
+
+ctx.filter="none";
+
+showResult();
+
+}
+
+
+
+function contrast(){
+
+loadCanvas();
+
+ctx.filter="contrast(180%) brightness(110%)";
+
+ctx.drawImage(
+canvas,
+0,
+0
+);
+
+ctx.filter="none";
+
+showResult();
+
+function dotwork(){
+
+loadCanvas();
+
+let imgData=ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+let data=imgData.data;
+
+
+for(let y=0;y<canvas.height;y+=6){
+
+for(let x=0;x<canvas.width;x+=6){
+
+let index=(y*canvas.width+x)*4;
+
+let darkness=
+255-data[index];
+
+
+if(darkness>80){
+
+ctx.fillStyle="black";
+
+ctx.beginPath();
+
+ctx.arc(
+x,
+y,
+1.2,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+}
+
+}
+
+}
+
+
+showResult();
+
+}
+
+
+
+function showResult(){
+
+let img=document.getElementById("preview");
+
+img.src=canvas.toDataURL();
+
+img.style.display="block";
+
+}
+
+
+
+function downloadImage(){
+
+let link=document.createElement("a");
+
+link.download="Xua_Tattoo_AI_Estencil.png";
+
+link.href=canvas.toDataURL();
+
+link.click();
+
+}
+
+
+</script>
+
+</body>
+
+</html>
