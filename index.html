@@ -6,57 +6,42 @@
 
 <title>Xua Tattoo AI</title>
 
-<style>
+<script async src="https://docs.opencv.org/4.x/opencv.js"></script>
 
+<style>
 body{
-background:#0b0b0b;
+background:#0a0a0a;
 color:white;
 font-family:Arial;
 text-align:center;
 padding:20px;
 }
 
-h1{
-font-size:35px;
-}
-
-.box{
-background:#1b1b1b;
-padding:20px;
-border-radius:15px;
+.container{
 max-width:500px;
 margin:auto;
+background:#171717;
+padding:20px;
+border-radius:15px;
 }
 
 button{
-background:white;
-color:black;
-border:0;
-padding:14px;
+padding:12px;
 margin:8px;
-border-radius:10px;
+border-radius:8px;
+border:none;
 font-weight:bold;
 }
 
 input{
-margin:15px;
+margin:10px;
 }
 
 canvas{
-display:none;
-}
-
-img{
-max-width:95%;
+max-width:100%;
 margin-top:20px;
 border:2px solid white;
 }
-
-label{
-display:block;
-margin-top:15px;
-}
-
 </style>
 
 </head>
@@ -66,215 +51,179 @@ margin-top:15px;
 
 <h1>🔥 Xua Tattoo AI 🔥</h1>
 
-<div class="box">
+<div class="container">
 
-<p>Generador profesional de esténcil para tatuajes</p>
-
-
-<input type="file" id="upload" accept="image/*">
+<p>Generador profesional de esténcil</p>
 
 
-<label>
-Oscurecer líneas:
-<input type="range" id="dark" min="0" max="255" value="120">
-</label>
+<input type="file" id="file">
 
+
+<br>
 
 <label>
-Puntos de sombra:
-<input type="range" id="dots" min="0" max="10" value="4">
+Grosor de línea
+<input type="range" id="thick" min="1" max="10" value="3">
 </label>
 
 
 <br>
 
 
-<button onclick="crearStencil()">
+<button onclick="procesar()">
 CREAR ESTÉNCIL
 </button>
 
 
 <button onclick="descargar()">
-DESCARGAR PNG
+DESCARGAR
 </button>
-
-
-<img id="resultado">
-
-
-</div>
 
 
 <canvas id="canvas"></canvas>
 
 
+</div>
+
+
 
 <script>
 
-let imagen=new Image();
+
+let imgElement=new Image();
 
 let canvas=document.getElementById("canvas");
 
 let ctx=canvas.getContext("2d");
 
-let resultado=document.getElementById("resultado");
 
 
+document.getElementById("file").onchange=function(e){
 
-document.getElementById("upload").onchange=function(e){
-
-let archivo=e.target.files[0];
-
-let lector=new FileReader();
+let reader=new FileReader();
 
 
-lector.onload=function(){
+reader.onload=function(){
 
-imagen.onload=function(){
+imgElement.onload=function(){
 
-resultado.src=imagen.src;
+canvas.width=imgElement.width;
+canvas.height=imgElement.height;
+
+ctx.drawImage(imgElement,0,0);
+
+}
+
+imgElement.src=reader.result;
+
+}
+
+reader.readAsDataURL(e.target.files[0]);
 
 }
 
 
-imagen.src=lector.result;
+
+
+
+function procesar(){
+
+
+if(typeof cv=="undefined"){
+
+alert("Cargando motor de imagen, espera unos segundos y prueba otra vez");
+
+return;
 
 }
 
 
-lector.readAsDataURL(archivo);
 
-}
+let src=cv.imread(canvas);
 
+let gray=new cv.Mat();
 
-
-
-
-function crearStencil(){
-
-
-canvas.width=imagen.width;
-
-canvas.height=imagen.height;
-
-
-ctx.drawImage(imagen,0,0);
+let edges=new cv.Mat();
 
 
 
-let datos=ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
+// pasar a blanco y negro
+
+cv.cvtColor(
+src,
+gray,
+cv.COLOR_RGBA2GRAY
 );
 
 
 
-let intensidad=
-document.getElementById("dark").value;
+// detectar líneas
 
-
-
-for(let i=0;i<datos.data.length;i+=4){
-
-
-let brillo=
-(datos.data[i]+datos.data[i+1]+datos.data[i+2])/3;
-
-
-
-if(brillo<intensidad){
-
-datos.data[i]=0;
-datos.data[i+1]=0;
-datos.data[i+2]=0;
-
-}else{
-
-datos.data[i]=255;
-datos.data[i+1]=255;
-datos.data[i+2]=255;
-
-}
-
-
-}
-
-
-
-ctx.putImageData(datos,0,0);
-
-
-
-crearPuntos();
-
-
-
-resultado.src=canvas.toDataURL();
-
-}
-
-
-
-
-
-function crearPuntos(){
-
-
-let cantidad=
-document.getElementById("dots").value;
-
-
-ctx.fillStyle="black";
-
-
-for(let y=0;y<canvas.height;y+=20){
-
-
-for(let x=0;x<canvas.width;x+=20){
-
-
-if(Math.random()<cantidad/20){
-
-ctx.beginPath();
-
-ctx.arc(
-x,
-y,
-2,
-0,
-Math.PI*2
+cv.Canny(
+gray,
+edges,
+80,
+150
 );
 
-ctx.fill();
+
+
+// engrosar líneas
+
+let size=document.getElementById("thick").value;
+
+let kernel=cv.Mat.ones(
+size,
+size,
+cv.CV_8U
+);
+
+
+cv.dilate(
+edges,
+edges,
+kernel
+);
+
+
+
+// invertir para esténcil
+
+cv.bitwise_not(
+edges,
+edges
+);
+
+
+
+cv.imshow(
+canvas,
+edges
+);
+
+
+
+src.delete();
+gray.delete();
+edges.delete();
+kernel.delete();
 
 
 }
 
-
-}
-
-
-}
-
-
-}
 
 
 
 
 function descargar(){
 
+let link=document.createElement("a");
 
-let enlace=document.createElement("a");
+link.download="Xua_Tattoo_AI_Estencil.png";
 
-enlace.download="Xua_Tattoo_AI_Estencil.png";
+link.href=canvas.toDataURL();
 
-enlace.href=canvas.toDataURL();
-
-enlace.click();
-
+link.click();
 
 }
 
@@ -284,4 +233,3 @@ enlace.click();
 
 </body>
 </html>
-
