@@ -1,463 +1,197 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Xua Tattoo AI Pro</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<style>
+<title>Xua Tattoo AI</title>
 
-@import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
+<link rel="stylesheet" href="style.css">
 
-body{
-margin:0;
-background:#050505;
-color:white;
-font-family:Arial,sans-serif;
-text-align:center;
-padding:20px;
-}
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-h1{
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-font-family:'UnifrakturCook',serif;
-font-size:48px;
-margin:10px;
-
-}
-
-
-.sub{
-
-color:#aaa;
-letter-spacing:4px;
-font-size:14px;
-
-}
-
-
-.app{
-
-max-width:700px;
-margin:auto;
-background:#111;
-border:1px solid #333;
-border-radius:25px;
-padding:25px;
-box-shadow:0 0 30px #000;
-
-}
-
-
-.panel{
-
-background:#080808;
-border-radius:15px;
-padding:15px;
-margin:15px 0;
-
-}
-
-
-
-input,select{
-
-padding:10px;
-border-radius:10px;
-background:#222;
-color:white;
-
-}
-
-
-.crear{
-
-width:90%;
-padding:18px;
-font-size:22px;
-font-weight:bold;
-background:#222;
-color:white;
-border:2px solid #777;
-border-radius:15px;
-cursor:pointer;
-
-}
-
-
-button{
-
-padding:12px;
-margin:5px;
-border-radius:10px;
-background:#1a1a1a;
-color:white;
-border:1px solid #555;
-font-weight:bold;
-cursor:pointer;
-
-}
-
-
-button:hover{
-
-background:#333;
-
-}
-
-
-canvas{
-
-max-width:100%;
-margin-top:20px;
-background:white;
-border-radius:12px;
-
-}
-
-
-</style>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
-
 <body>
 
+<div class="backgroundGlow"></div>
 
-<h1>XUA TATTOO AI</h1>
+<div class="phone">
 
-<div class="sub">
- CREA TU ESTENCIL FACIL Y RAPIDO
- BY: JUANSEC TATTOO - XUA INK STUDIO.
-</div>
+<header>
 
+<button class="iconButton">
 
-<div class="app">
+<i class="fas fa-bars"></i>
 
+</button>
 
-<div class="panel">
+<div>
 
-<h3>📷 Cargar tatuaje</h3>
+<h1>Xua Tattoo</h1>
 
-<input type="file" id="foto" accept="image/*">
-
-</div>
-
-
-
-<div class="panel">
-
-<h3>⚔ Modo de esténcil</h3>
-
-<select id="modo">
-
-<option value="linea">
-🖊 Línea limpia
-</option>
-
-<option value="real">
-🩶 Realista
-</option>
-
-<option value="dot">
-• Dotwork
-</option>
-
-</select>
+<p>Professional AI Studio</p>
 
 </div>
 
+<button class="iconButton">
 
+<i class="fas fa-gear"></i>
 
-<div class="panel">
+</button>
 
-<label>
-Fuerza de línea
-<br>
-<input type="range" id="fuerza" min="10" max="80" value="30">
+</header>
+
+<div class="preview">
+
+<img id="preview">
+
+<div class="placeholder">
+
+<i class="fa-solid fa-image"></i>
+
+<p>Selecciona una imagen</p>
+
+</div>
+
+</div>
+
+<label class="upload">
+
+<input
+type="file"
+id="fileInput"
+accept="image/*"
+hidden>
+
+<i class="fa-solid fa-camera"></i>
+
+Seleccionar Imagen
+
 </label>
 
-<br><br>
+<section class="panel">
 
-<label>
-Sombra
-<br>
-<input type="range" id="sombra" min="1" max="10" value="5">
-</label>
+<h2>
+
+Herramientas
+
+</h2>
+
+<div class="slider">
+
+<span>Grosor</span>
+
+<input type="range" id="lineSize">
 
 </div>
 
+<div class="slider">
 
+<span>Contraste</span>
 
-<button class="crear" id="crear">
-🔥 CREAR ESTÉNCIL 🔥
+<input type="range" id="contrast">
+
+</div>
+
+<div class="slider">
+
+<span>Umbral</span>
+
+<input type="range" id="threshold">
+
+</div>
+
+<div class="slider">
+
+<span>Dotwork</span>
+
+<input type="range" id="dotDensity">
+
+</div>
+
+<div class="slider">
+
+<span>Nitidez</span>
+
+<input type="range" id="sharpness">
+
+</div>
+
+</section>
+
+<div class="actions">
+
+<button id="createBtn">
+
+<i class="fa-solid fa-wand-magic-sparkles"></i>
+
+Crear Esténcil
+
 </button>
 
+<button id="aiBtn">
 
-<br>
+<i class="fa-solid fa-brain"></i>
 
+Mejorar con IA
 
-<button id="limpiar">
-🧹 Restaurar
 </button>
 
+<button id="downloadBtn">
 
-<button id="descargar">
-💾 Descargar
+<i class="fa-solid fa-download"></i>
+
+Descargar PNG
+
 </button>
 
+</div>
 
+<nav>
+
+<button>
+
+<i class="fa-solid fa-house"></i>
+
+</button>
+
+<button>
+
+<i class="fa-solid fa-pen"></i>
+
+</button>
+
+<button>
+
+<i class="fa-solid fa-robot"></i>
+
+</button>
+
+<button>
+
+<i class="fa-solid fa-user"></i>
+
+</button>
+
+</nav>
 
 <canvas id="canvas"></canvas>
 
+</div>
 
-</div><script>
-
-const canvas=document.getElementById("canvas");
-const ctx=canvas.getContext("2d");
-
-let img=new Image();
-let original=null;
-
-
-
-document.getElementById("foto").addEventListener("change",function(e){
-
-let lector=new FileReader();
-
-lector.onload=function(){
-
-img.onload=function(){
-
-canvas.width=img.width;
-canvas.height=img.height;
-
-ctx.drawImage(img,0,0);
-
-
-original=ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-};
-
-img.src=lector.result;
-
-};
-
-lector.readAsDataURL(e.target.files[0]);
-
-});
-
-
-
-
-
-document.getElementById("crear").addEventListener("click",function(){
-
-
-if(!original){
-
-alert("Carga un tatuaje primero");
-return;
-
-}
-
-
-
-let datos=ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-let salida=ctx.createImageData(
-canvas.width,
-canvas.height
-);
-
-
-let modo=document.getElementById("modo").value;
-
-let fuerza=
-document.getElementById("fuerza").value;
-
-
-let sombra=
-document.getElementById("sombra").value;
-
-
-
-for(let y=1;y<canvas.height-1;y++){
-
-for(let x=1;x<canvas.width-1;x++){
-
-
-let p=(y*canvas.width+x)*4;
-
-
-let gris=(
-
-datos.data[p]+
-datos.data[p+1]+
-datos.data[p+2]
-
-)/3;
-
-
-
-let arriba=((y-1)*canvas.width+x)*4;
-let abajo=((y+1)*canvas.width+x)*4;
-let izquierda=(y*canvas.width+x-1)*4;
-let derecha=(y*canvas.width+x+1)*4;
-
-
-
-let borde=Math.abs(
-
-gris-
-
-(
-datos.data[arriba]+
-datos.data[abajo]+
-datos.data[izquierda]+
-datos.data[derecha]
-)/4
-
-);
-
-
-
-let negro=false;
-
-
-
-if(modo==="linea"){
-
-if(borde>fuerza){
-
-negro=true;
-
-}
-
-}
-
-
-
-if(modo==="real"){
-
-if(borde>fuerza || gris<120){
-
-negro=true;
-
-}
-
-}
-
-
-
-if(modo==="dot"){
-
-if(gris<120 && Math.random()<sombra/10){
-
-negro=true;
-
-}
-
-}
-
-
-
-
-if(negro){
-
-salida.data[p]=0;
-salida.data[p+1]=0;
-salida.data[p+2]=0;
-
-}else{
-
-salida.data[p]=255;
-salida.data[p+1]=255;
-salida.data[p+2]=255;
-
-}
-
-
-salida.data[p+3]=255;
-
-
-}
-
-}
-
-
-
-ctx.putImageData(
-salida,
-0,
-0
-);
-
-
-alert("Esténcil creado");
-
-
-});
-
-
-
-
-
-
-
-document.getElementById("limpiar").addEventListener("click",function(){
-
-
-if(original){
-
-ctx.putImageData(
-original,
-0,
-0
-);
-
-}
-
-});
-
-
-
-
-
-
-
-
-document.getElementById("descargar").addEventListener("click",function(){
-
-
-let link=document.createElement("a");
-
-link.download="Xua_Tattoo_AI_Stencil.png";
-
-link.href=canvas.toDataURL("image/png");
-
-link.click();
-
-
-});
-
-
-</script>
-
+<script src="app.js"></script>
 
 </body>
+
 </html>
