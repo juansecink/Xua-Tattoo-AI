@@ -1,59 +1,47 @@
-// =====================================
-// XUA TATTOO AI PRO
-// APP.JS V2
-// =====================================
+// ===============================
+// Xua Tattoo AI
+// app.js
+// ===============================
 
-// Variables globales
-window.fileInput = document.getElementById("fileInput");
-window.openImage = document.getElementById("openImage");
-window.saveImage = document.getElementById("saveImage");
+const fileInput = document.getElementById("fileInput");
+const preview = document.getElementById("preview");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
 
-window.canvas = document.getElementById("canvas");
-window.ctx = window.canvas.getContext("2d");
+const createBtn = document.getElementById("createBtn");
+const downloadBtn = document.getElementById("downloadBtn");
 
-window.currentImage = null;
-
-// Abrir explorador
-window.openImage.addEventListener("click", () => {
-    window.fileInput.click();
-});
+let originalImage = null;
 
 // Cargar imagen
-window.fileInput.addEventListener("change", function (event) {
+fileInput.addEventListener("change", function (e) {
 
-    const file = event.target.files[0];
+    const file = e.target.files[0];
 
     if (!file) return;
 
     const reader = new FileReader();
 
-    reader.onload = function (e) {
+    reader.onload = function (event) {
 
         const img = new Image();
 
         img.onload = function () {
 
-            window.currentImage = img;
+            originalImage = img;
 
-            window.canvas.width = img.width;
-            window.canvas.height = img.height;
+            canvas.width = img.width;
+            canvas.height = img.height;
 
-            window.ctx.clearRect(
-                0,
-                0,
-                window.canvas.width,
-                window.canvas.height
-            );
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
 
-            window.ctx.drawImage(
-                img,
-                0,
-                0
-            );
+            preview.src = canvas.toDataURL("image/png");
+            preview.style.display = "block";
 
         };
 
-        img.src = e.target.result;
+        img.src = event.target.result;
 
     };
 
@@ -61,12 +49,27 @@ window.fileInput.addEventListener("change", function (event) {
 
 });
 
+// Botón Crear Esténcil
+createBtn.addEventListener("click", function () {
+
+    if (!originalImage) {
+
+        alert("Primero selecciona una imagen.");
+
+        return;
+
+    }
+
+    alert("Motor de esténcil en desarrollo.");
+
+});
+
 // Descargar imagen
-window.saveImage.addEventListener("click", function () {
+downloadBtn.addEventListener("click", function () {
 
-    if (!window.currentImage) {
+    if (!preview.src) {
 
-        alert("Primero carga una imagen.");
+        alert("No hay imagen para descargar.");
 
         return;
 
@@ -74,10 +77,9 @@ window.saveImage.addEventListener("click", function () {
 
     const link = document.createElement("a");
 
-    link.download = "XuaTattooAI.png";
-
-    link.href = window.canvas.toDataURL("image/png");
+    link.download = "Xua_Tattoo_AI.png";
+    link.href = preview.src;
 
     link.click();
 
-});
+});ñ
