@@ -1,17 +1,132 @@
 <!DOCTYPE html>
 <html lang="es">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Xua Tattoo AI Pro</title>
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Xua Tattoo AI</title>
+
 <link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
 </head>
+
 <body>
-<h1>Xua Tattoo AI Pro</h1>
-<button id="openImage">Abrir imagen</button>
-<button id="createStencil">Crear esténcil</button>
-<button id="saveImage">Descargar</button>
-<input id="fileInput" type="file" accept="image/*" hidden>
+
+<div class="app">
+
+<header>
+
+<h1 class="logo">Xua Tattoo</h1>
+
+<p class="subtitle">Professional AI Stencil Creator</p>
+
+</header>
+
+<section class="upload-card">
+
+<h2>Subir Imagen</h2>
+
+<input type="file" id="fileInput" accept="image/*">
+
+</section>
+
+<section class="preview-card">
+
+<h2>Vista Previa</h2>
+
+<img id="preview" alt="Vista previa">
+
 <canvas id="canvas"></canvas>
+
+</section>
+
+<section class="tools-card">
+
+<h2>Herramientas</h2>
+
+<div class="tool">
+
+<label>Grosor de línea</label>
+
+<input type="range" id="lineSize" min="1" max="10" value="3">
+
+</div>
+
+<div class="tool">
+
+<label>Contraste</label>
+
+<input type="range" id="contrast" min="0" max="200" value="100">
+
+</div>
+
+<div class="tool">
+
+<label>Umbral</label>
+
+<input type="range" id="threshold" min="0" max="255" value="120">
+
+</div>
+
+<div class="tool">
+
+<label>Puntillismo</label>
+
+<input type="range" id="dotDensity" min="0" max="100" value="40">
+
+</div>
+
+<div class="tool">
+
+<label>Suavizado</label>
+
+<input type="range" id="smooth" min="0" max="100" value="50">
+
+</div>
+
+</section>
+
+<section class="buttons">
+
+<button id="createBtn">
+
+Crear Esténcil
+
+</button>
+
+<button id="downloadBtn">
+
+Descargar PNG
+
+</button>
+
+</section>
+
+<nav class="bottom-menu">
+
+<button>🏠 Inicio</button>
+
+<button>✒ Esténcil</button>
+
+<button>🤖 IA</button>
+
+<button>⚙ Ajustes</button>
+
+</nav>
+
+</div>
+
 <script src="app.js"></script>
-<script src="stencil.js"></script>
+
 </body>
+
 </html>
