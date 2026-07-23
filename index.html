@@ -1,66 +1,112 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Xua Tattoo AI</title>
 
 <style>
+
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
+
 body{
-background:#090909;
+margin:0;
+background:#050505;
 color:white;
-font-family:Arial;
+font-family:Arial, sans-serif;
 text-align:center;
-padding:20px;
 }
 
-.box{
-background:#181818;
-padding:20px;
-border-radius:20px;
-max-width:600px;
-margin:auto;
+header{
+padding:25px;
 }
+
+h1{
+font-family:'UnifrakturCook',cursive;
+font-size:45px;
+letter-spacing:3px;
+margin:10px;
+}
+
+.subtitle{
+color:#aaa;
+font-size:15px;
+}
+
+.app{
+
+max-width:650px;
+margin:auto;
+background:#111;
+border:1px solid #333;
+border-radius:20px;
+padding:20px;
+box-shadow:0 0 25px #000;
+
+}
+
+
+input{
+
+margin:15px;
+
+}
+
 
 button{
-padding:12px;
+
+background:#111;
+color:white;
+border:1px solid #555;
+padding:14px;
 margin:6px;
-border-radius:10px;
+border-radius:12px;
 font-weight:bold;
+cursor:pointer;
+
 }
+
+
+button:hover{
+
+background:#333;
+
+}
+
+
+.panel{
+
+background:#080808;
+padding:15px;
+border-radius:15px;
+margin-top:15px;
+
+}
+
+
+label{
+
+display:block;
+margin:15px;
+
+}
+
 
 canvas{
+
 max-width:100%;
-background:white;
 margin-top:20px;
+background:white;
+border-radius:10px;
+
 }
+
+
 </style>
+
 </head>
-
-<body>
-
-<h1>🔥 Xua Tattoo AI 🔥</h1>
-
-<div class="box">
-
-<input type="file" id="file">
-
-<br>
-
-<button onclick="crearStencil()">CREAR ESTÉNCIL</button>
-
-<button onclick="dotwork()">DOTWORK</button>
-
-<button onclick="invertir()">INVERTIR</button>
-
-<button onclick="descargar()">DESCARGAR</button>
-
-
-<canvas id="canvas"></canvas>
-
-</div>
-
 
 <script>
 
@@ -68,13 +114,15 @@ let canvas=document.getElementById("canvas");
 let ctx=canvas.getContext("2d");
 
 let img=new Image();
+let original=null;
 
 
-document.getElementById("file").onchange=function(e){
 
-let r=new FileReader();
+document.getElementById("imagen").onchange=function(e){
 
-r.onload=function(){
+let lector=new FileReader();
+
+lector.onload=function(){
 
 img.onload=function(){
 
@@ -83,13 +131,20 @@ canvas.height=img.height;
 
 ctx.drawImage(img,0,0);
 
+original=ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
 }
 
-img.src=r.result;
+img.src=lector.result;
 
 }
 
-r.readAsDataURL(e.target.files[0]);
+lector.readAsDataURL(e.target.files[0]);
 
 };
 
@@ -97,14 +152,24 @@ r.readAsDataURL(e.target.files[0]);
 
 
 
-function crearStencil(){
+function crearLinea(){
+
+if(!original){
+alert("Carga una imagen primero");
+return;
+}
+
 
 let w=canvas.width;
 let h=canvas.height;
 
-let original=ctx.getImageData(0,0,w,h);
 
+let datos=ctx.getImageData(0,0,w,h);
 let salida=ctx.createImageData(w,h);
+
+
+let fuerza=
+document.getElementById("fuerza").value;
 
 
 
@@ -115,33 +180,29 @@ for(let x=1;x<w-1;x++){
 
 let p=(y*w+x)*4;
 
-let a=((y-1)*w+x)*4;
-let b=((y+1)*w+x)*4;
-let i=(y*w+x-1)*4;
-let d=(y*w+x+1)*4;
+let arriba=((y-1)*w+x)*4;
+let abajo=((y+1)*w+x)*4;
+let izq=(y*w+x-1)*4;
+let der=(y*w+x+1)*4;
 
 
 let centro=
-(
-original.data[p]+
-original.data[p+1]+
-original.data[p+2]
-)/3;
+(datos.data[p]+datos.data[p+1]+datos.data[p+2])/3;
 
 
-let cambio=Math.abs(
+let diferencia=Math.abs(
 centro-
 (
-original.data[a]+
-original.data[b]+
-original.data[i]+
-original.data[d]
-)/4
+(datos.data[arriba]+
+datos.data[abajo]+
+datos.data[izq]+
+datos.data[der])/4
+)
 );
 
 
 
-if(cambio>15){
+if(diferencia>fuerza){
 
 salida.data[p]=0;
 salida.data[p+1]=0;
@@ -157,6 +218,7 @@ salida.data[p+2]=255;
 
 salida.data[p+3]=255;
 
+
 }
 
 }
@@ -169,7 +231,25 @@ ctx.putImageData(salida,0,0);
 
 
 
+
+function crearRealista(){
+
+crearLinea();
+
+dotwork();
+
+}
+
+
+
+
+
 function dotwork(){
+
+
+let cantidad=
+document.getElementById("sombra").value;
+
 
 let datos=ctx.getImageData(
 0,
@@ -186,37 +266,60 @@ for(let y=0;y<canvas.height;y+=12){
 
 for(let x=0;x<canvas.width;x+=12){
 
+
 let p=(y*canvas.width+x)*4;
 
 
-if(datos.data[p]<80 && Math.random()>0.65){
+if(datos.data[p]<100 &&
+Math.random()<(cantidad/15)){
+
 
 ctx.beginPath();
 
 ctx.arc(
 x,
 y,
-1.2,
+1.5,
 0,
 Math.PI*2
 );
 
 ctx.fill();
 
+
 }
+
 
 }
 
 }
 
 }
+
+
+
+
+function limpiar(){
+
+if(original){
+
+ctx.putImageData(
+original,
+0,
+0
+);
+
+}
+
+}
+
 
 
 
 
 function invertir(){
 
-let d=ctx.getImageData(
+let datos=ctx.getImageData(
 0,
 0,
 canvas.width,
@@ -224,34 +327,127 @@ canvas.height
 );
 
 
-for(let i=0;i<d.data.length;i+=4){
+for(let i=0;i<datos.data.length;i+=4){
 
-d.data[i]=255-d.data[i];
-d.data[i+1]=255-d.data[i+1];
-d.data[i+2]=255-d.data[i+2];
+datos.data[i]=255-datos.data[i];
+datos.data[i+1]=255-datos.data[i+1];
+datos.data[i+2]=255-datos.data[i+2];
+
+}
+
+
+ctx.putImageData(
+datos,
+0,
+0
+);
 
 }
 
 
-ctx.putImageData(d,0,0);
-
-}
 
 
 
 function descargar(){
 
-let a=document.createElement("a");
+let enlace=document.createElement("a");
 
-a.download="Xua_Tattoo_AI_Estencil.png";
+enlace.download=
+"Xua_Tattoo_AI_Stencil.png";
 
-a.href=canvas.toDataURL();
 
-a.click();
+enlace.href=
+canvas.toDataURL("image/png");
+
+
+enlace.click();
 
 }
+
 
 </script>
 
 </body>
+
 </html>
+<body>
+
+
+<header>
+
+<h1>XUA TATTOO AI</h1>
+
+<div class="subtitle">
+BLACKLETTER STENCIL GENERATOR
+</div>
+
+</header>
+
+
+<div class="app">
+
+
+<input type="file" id="imagen" accept="image/*">
+
+
+<div class="panel">
+
+
+<h3>Herramientas</h3>
+
+
+<button onclick="crearLinea()">
+🖊 ESTÉNCIL LÍNEA
+</button>
+
+
+<button onclick="crearRealista()">
+🩶 ESTÉNCIL REALISTA
+</button>
+
+
+<button onclick="dotwork()">
+• DOTWORK
+</button>
+
+
+<button onclick="limpiar()">
+🧹 LIMPIAR
+</button>
+
+
+<button onclick="invertir()">
+🔄 INVERTIR
+</button>
+
+
+<button onclick="descargar()">
+💾 DESCARGAR
+</button>
+
+
+</div>
+
+
+<div class="panel">
+
+
+<label>
+Fuerza de línea
+<input type="range" id="fuerza" min="5" max="80" value="25">
+</label>
+
+
+<label>
+Cantidad de sombra
+<input type="range" id="sombra" min="1" max="10" value="5">
+</label>
+
+
+</div>
+
+
+<canvas id="canvas"></canvas>
+
+
+</div>
