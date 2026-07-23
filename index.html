@@ -3,36 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Xua Tattoo AI</title>
 
 <style>
 body{
-background:#0b0b0b;
+background:#090909;
 color:white;
 font-family:Arial;
 text-align:center;
-padding:20px
+padding:20px;
 }
 
 .box{
+background:#181818;
+padding:20px;
+border-radius:20px;
 max-width:600px;
 margin:auto;
-background:#171717;
-padding:20px;
-border-radius:20px
 }
 
-button,input{
-margin:8px;
+button{
 padding:12px;
+margin:6px;
 border-radius:10px;
-font-weight:bold
+font-weight:bold;
 }
 
 canvas{
 max-width:100%;
 background:white;
-margin-top:20px
+margin-top:20px;
 }
 </style>
 </head>
@@ -43,27 +44,18 @@ margin-top:20px
 
 <div class="box">
 
-<input type="file" id="file" accept="image/*">
+<input type="file" id="file">
 
 <br>
 
-<label>Línea:
-<input id="linea" type="range" min="5" max="80" value="25">
-</label>
+<button onclick="crearStencil()">CREAR ESTÉNCIL</button>
 
-<br>
-
-<label>Contraste:
-<input id="cont" type="range" min="1" max="5" value="2">
-</label>
-
-<br>
-
-<button onclick="stencil()">CREAR ESTÉNCIL</button>
+<button onclick="dotwork()">DOTWORK</button>
 
 <button onclick="invertir()">INVERTIR</button>
 
 <button onclick="descargar()">DESCARGAR</button>
+
 
 <canvas id="canvas"></canvas>
 
@@ -74,6 +66,7 @@ margin-top:20px
 
 let canvas=document.getElementById("canvas");
 let ctx=canvas.getContext("2d");
+
 let img=new Image();
 
 
@@ -102,77 +95,134 @@ r.readAsDataURL(e.target.files[0]);
 
 
 
-function stencil(){
+
+
+function crearStencil(){
 
 let w=canvas.width;
 let h=canvas.height;
 
-let data=ctx.getImageData(0,0,w,h);
-let out=ctx.createImageData(w,h);
+let original=ctx.getImageData(0,0,w,h);
 
-let fuerza=document.getElementById("linea").value;
-let contraste=document.getElementById("cont").value;
+let salida=ctx.createImageData(w,h);
+
 
 
 for(let y=1;y<h-1;y++){
 
 for(let x=1;x<w-1;x++){
 
+
 let p=(y*w+x)*4;
 
-let arriba=((y-1)*w+x)*4;
-let abajo=((y+1)*w+x)*4;
-let izq=(y*w+x-1)*4;
-let der=(y*w+x+1)*4;
+let a=((y-1)*w+x)*4;
+let b=((y+1)*w+x)*4;
+let i=(y*w+x-1)*4;
+let d=(y*w+x+1)*4;
 
 
-let centro=(data.data[p]+data.data[p+1]+data.data[p+2])/3;
+let centro=
+(
+original.data[p]+
+original.data[p+1]+
+original.data[p+2]
+)/3;
 
 
-let borde=Math.abs(
+let cambio=Math.abs(
 centro-
 (
-data.data[arriba]+
-data.data[abajo]+
-data.data[izq]+
-data.data[der]
+original.data[a]+
+original.data[b]+
+original.data[i]+
+original.data[d]
 )/4
 );
 
 
-borde*=contraste;
 
+if(cambio>15){
 
-if(borde>fuerza){
-
-out.data[p]=0;
-out.data[p+1]=0;
-out.data[p+2]=0;
+salida.data[p]=0;
+salida.data[p+1]=0;
+salida.data[p+2]=0;
 
 }else{
 
-out.data[p]=255;
-out.data[p+1]=255;
-out.data[p+2]=255;
+salida.data[p]=255;
+salida.data[p+1]=255;
+salida.data[p+2]=255;
 
 }
 
-out.data[p+3]=255;
+salida.data[p+3]=255;
 
 }
 
 }
 
 
-ctx.putImageData(out,0,0);
+ctx.putImageData(salida,0,0);
 
 }
+
+
+
+
+function dotwork(){
+
+let datos=ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+ctx.fillStyle="black";
+
+
+for(let y=0;y<canvas.height;y+=12){
+
+for(let x=0;x<canvas.width;x+=12){
+
+let p=(y*canvas.width+x)*4;
+
+
+if(datos.data[p]<80 && Math.random()>0.65){
+
+ctx.beginPath();
+
+ctx.arc(
+x,
+y,
+1.2,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+}
+
+}
+
+}
+
+}
+
 
 
 
 function invertir(){
 
-let d=ctx.getImageData(0,0,canvas.width,canvas.height);
+let d=ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
 
 for(let i=0;i<d.data.length;i+=4){
 
@@ -181,6 +231,7 @@ d.data[i+1]=255-d.data[i+1];
 d.data[i+2]=255-d.data[i+2];
 
 }
+
 
 ctx.putImageData(d,0,0);
 
