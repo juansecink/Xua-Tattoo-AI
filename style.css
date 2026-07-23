@@ -1,6 +1,6 @@
 /* ===========================
-   XUA TATTOO AI PRO
-   STYLE.CSS
+   Xua Tattoo AI
+   style.css
 =========================== */
 
 *{
@@ -9,306 +9,52 @@
     box-sizing:border-box;
 }
 
-html,body{
-    width:100%;
-    height:100%;
-    background:#0d0d0d;
-    color:#fff;
-    font-family:Arial,Helvetica,sans-serif;
-    overflow:hidden;
-}
-
-/* Fondo */
-
 body{
-
-background:linear-gradient(
-180deg,
-#0b0b0b,
-#161616,
-#101010
-);
-
+    background:#000;
+    color:#fff;
+    font-family:Arial, Helvetica, sans-serif;
+    min-height:100vh;
 }
-
-/* Contenedor principal */
 
 .app{
-
-display:flex;
-
-flex-direction:column;
-
-width:100%;
-
-height:100vh;
-
+    max-width:700px;
+    margin:auto;
+    padding:25px 18px 120px;
 }
 
-/* ===========================
-HEADER
-=========================== */
+/* ---------- Encabezado ---------- */
 
 header{
-
-height:75px;
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
-padding:0 25px;
-
-background:#151515;
-
-border-bottom:1px solid #303030;
-
-box-shadow:0 0 15px rgba(0,0,0,.5);
-
+    text-align:center;
+    margin-bottom:30px;
 }
 
-/* Logo */
-
-.logo h1{
-
-font-size:30px;
-
-font-weight:900;
-
-letter-spacing:2px;
-
+.logo{
+    font-family:'Great Vibes', cursive;
+    font-size:60px;
+    color:white;
+    font-weight:normal;
 }
 
-.logo span{
-
-color:#00c8ff;
-
+.subtitle{
+    margin-top:8px;
+    color:#bfbfbf;
+    letter-spacing:2px;
+    font-size:14px;
 }
 
-.logo p{
+/* ---------- Tarjetas ---------- */
 
-margin-top:5px;
+.upload-card,
+.preview-card,
+.tools-card{
 
-font-size:13px;
+    background:#111;
 
-color:#999;
+    border:1px solid #333;
 
-}
+    border-radius:20px;
 
-/* Botones superiores */
+    padding:20px;
 
-.header-buttons{
-
-display:flex;
-
-gap:12px;
-
-}
-
-.header-buttons button{
-
-padding:12px 22px;
-
-background:#00c8ff;
-
-color:#fff;
-
-border:none;
-
-border-radius:12px;
-
-cursor:pointer;
-
-font-weight:bold;
-
-transition:.25s;
-
-}
-
-.header-buttons button:hover{
-
-transform:translateY(-2px);
-
-background:#00a8d8;
-
-}
-
-/* ===========================
-MAIN
-=========================== */
-
-main{
-
-flex:1;
-
-display:flex;
-
-overflow:hidden;
-
-}
-
-/* ===========================
-PANEL IZQUIERDO
-=========================== */
-
-.tools{
-
-width:290px;
-
-background:#181818;
-
-border-right:1px solid #2e2e2e;
-
-padding:20px;
-
-overflow-y:auto;
-
-}
-
-.tools h2{
-
-font-size:22px;
-
-margin-bottom:25px;
-
-}
-
-.tool{
-
-margin-bottom:22px;
-
-}
-
-.tool label{
-
-display:block;
-
-margin-bottom:10px;
-
-font-size:14px;
-
-color:#cfcfcf;
-
-}
-
-.tool input[type=range]{
-
-width:100%;
-
-accent-color:#00c8ff;
-
-}
-
-/* Botones laterales */
-
-.tools button{
-
-width:100%;
-
-margin-top:14px;
-
-padding:14px;
-
-background:#252525;
-
-color:white;
-
-border:none;
-
-border-radius:12px;
-
-font-size:15px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-transition:.25s;
-
-}
-
-.tools button:hover{
-
-background:#00c8ff;
-
-}
-
-/* ===========================
-ÁREA DE TRABAJO
-=========================== */
-
-.workspace{
-
-flex:1;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-padding:25px;
-
-background:#101010;
-
-}
-
-.canvasBox{
-
-width:100%;
-
-height:100%;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-border:2px dashed #3a3a3a;
-
-border-radius:18px;
-
-background:#1b1b1b;
-
-overflow:hidden;
-
-}
-
-canvas{
-
-max-width:100%;
-
-max-height:100%;
-
-border-radius:10px;
-
-background:white;
-
-}
-
-/* Responsive */
-
-@media(max-width:900px){
-
-.tools{
-
-width:220px;
-
-}
-
-.logo h1{
-
-font-size:22px;
-
-}
-
-.header-buttons button{
-
-padding:10px 16px;
-
-}
-
-}
+    margin-bottom:20
