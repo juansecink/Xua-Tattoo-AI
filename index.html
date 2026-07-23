@@ -16,7 +16,7 @@ padding:20px;
 }
 
 .box{
-max-width:600px;
+max-width:650px;
 margin:auto;
 background:#151515;
 padding:20px;
@@ -29,6 +29,10 @@ margin:5px;
 border-radius:10px;
 border:none;
 font-weight:bold;
+}
+
+input{
+margin:10px;
 }
 
 canvas{
@@ -50,10 +54,43 @@ margin-top:20px;
 
 <br>
 
-<button id="stencil">CREAR ESTÉNCIL</button>
-<button id="reset">LIMPIAR</button>
-<button id="invertir">INVERTIR</button>
-<button id="download">DESCARGAR</button>
+<label>
+Fuerza línea
+<input type="range" id="linea" min="5" max="80" value="25">
+</label>
+
+<br>
+
+<label>
+Sombras
+<input type="range" id="sombra" min="1" max="10" value="5">
+</label>
+
+<br>
+
+<button id="pro">
+🖊 ESTÉNCIL PRO
+</button>
+
+<button id="real">
+🩶 REALISTA
+</button>
+
+<button id="dot">
+• DOTWORK
+</button>
+
+<button id="reset">
+🧹 LIMPIAR
+</button>
+
+<button id="invert">
+🔄 INVERTIR
+</button>
+
+<button id="save">
+💾 DESCARGAR
+</button>
 
 <canvas id="canvas"></canvas>
 
@@ -65,149 +102,9 @@ margin-top:20px;
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
 
-let imagen=new Image();
-let guardado=null;
-
-
-document.getElementById("foto").onchange=function(e){
-
-let lector=new FileReader();
-
-lector.onload=function(){
-
-imagen.onload=function(){
-
-canvas.width=imagen.width;
-canvas.height=imagen.height;
-
-ctx.drawImage(imagen,0,0);
-
-guardado=ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-};
-
-imagen.src=lector.result;
-
-};
-
-lector.readAsDataURL(e.target.files[0]);
-
-};
+let img=new Image();
+let original=null;
 
 
 
-document.getElementById("stencil").onclick=function(){
-
-if(!guardado){
-alert("Carga una imagen primero");
-return;
-}
-
-
-let datos=ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-for(let i=0;i<datos.data.length;i+=4){
-
-let gris=
-(
-datos.data[i]+
-datos.data[i+1]+
-datos.data[i+2]
-)/3;
-
-
-if(gris<140){
-
-datos.data[i]=0;
-datos.data[i+1]=0;
-datos.data[i+2]=0;
-
-}else{
-
-datos.data[i]=255;
-datos.data[i+1]=255;
-datos.data[i+2]=255;
-
-}
-
-
-}
-
-
-ctx.putImageData(datos,0,0);
-
-alert("Esténcil creado");
-
-};
-
-
-
-document.getElementById("reset").onclick=function(){
-
-if(guardado){
-
-ctx.putImageData(
-guardado,
-0,
-0
-);
-
-}
-
-};
-
-
-
-document.getElementById("invertir").onclick=function(){
-
-let datos=ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-for(let i=0;i<datos.data.length;i+=4){
-
-datos.data[i]=255-datos.data[i];
-datos.data[i+1]=255-datos.data[i+1];
-datos.data[i+2]=255-datos.data[i+2];
-
-}
-
-
-ctx.putImageData(datos,0,0);
-
-};
-
-
-
-document.getElementById("download").onclick=function(){
-
-let a=document.createElement("a");
-
-a.download="Xua_Tattoo_AI.png";
-
-a.href=canvas.toDataURL();
-
-a.click();
-
-};
-
-
-</script>
-
-</body>
-</html>
+document.getElementById("foto").on
