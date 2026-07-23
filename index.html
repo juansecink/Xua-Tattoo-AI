@@ -5,13 +5,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Xua Tattoo AI</title>
+<title>Xua Tattoo AI Pro</title>
 
 <style>
 
 @import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
 
 body{
+margin:0;
 background:#050505;
 color:white;
 font-family:Arial,sans-serif;
@@ -19,51 +20,55 @@ text-align:center;
 padding:20px;
 }
 
+
 h1{
+
 font-family:'UnifrakturCook',serif;
-font-size:45px;
+font-size:48px;
 margin:10px;
+
 }
+
 
 .sub{
+
 color:#aaa;
-letter-spacing:3px;
+letter-spacing:4px;
+font-size:14px;
+
 }
 
+
 .app{
-max-width:650px;
+
+max-width:700px;
 margin:auto;
 background:#111;
 border:1px solid #333;
 border-radius:25px;
 padding:25px;
+box-shadow:0 0 30px #000;
+
 }
+
 
 .panel{
+
 background:#080808;
-padding:15px;
 border-radius:15px;
+padding:15px;
 margin:15px 0;
+
 }
 
 
-select{
-padding:12px;
+
+input,select{
+
+padding:10px;
 border-radius:10px;
 background:#222;
 color:white;
-font-size:16px;
-}
-
-
-button{
-
-padding:15px;
-margin:6px;
-border-radius:12px;
-border:none;
-font-weight:bold;
-cursor:pointer;
 
 }
 
@@ -71,9 +76,35 @@ cursor:pointer;
 .crear{
 
 width:90%;
+padding:18px;
 font-size:22px;
-background:#333;
+font-weight:bold;
+background:#222;
 color:white;
+border:2px solid #777;
+border-radius:15px;
+cursor:pointer;
+
+}
+
+
+button{
+
+padding:12px;
+margin:5px;
+border-radius:10px;
+background:#1a1a1a;
+color:white;
+border:1px solid #555;
+font-weight:bold;
+cursor:pointer;
+
+}
+
+
+button:hover{
+
+background:#333;
 
 }
 
@@ -83,7 +114,7 @@ canvas{
 max-width:100%;
 margin-top:20px;
 background:white;
-border-radius:10px;
+border-radius:12px;
 
 }
 
@@ -99,87 +130,11 @@ border-radius:10px;
 <h1>XUA TATTOO AI</h1>
 
 <div class="sub">
-BLACKLETTER STENCIL STUDIO
-</div>
-
-
-<div class="app">
-
-
-<div class="panel">
-
-<input type="file" id="foto" accept="image/*">
-
-</div>
-
-
-
-<div class="panel">
-
-<h3>Modo de esténcil</h3>
-
-
-<select id="modo">
-
-<option value="linea">
-🖊 Línea limpia
-</option>
-
-
-<option value="real">
-🩶 Realista
-</option>
-
-
-<option value="dot">
-• Dotwork
-</option>
-
-
-</select>
-
-
-</div>
-
-
-
-<button class="crear" id="crear">
-
-🔥 CREAR ESTÉNCIL 🔥
-
-</button>
-
-
-
-<br>
-
-
-<button id="limpiar">
-🧹 Restaurar
-</button>
-
-
-<button id="descargar">
-💾 Descargar
-</button>
-
-
-
-<canvas id="canvas"></canvas>
-
-
-
-</div>
-
-
-
-
-<script>
-
+BLACKLETTER STENCIL
+  <script>
 
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
-
 
 let img=new Image();
 let original=null;
@@ -188,19 +143,14 @@ let original=null;
 
 document.getElementById("foto").addEventListener("change",function(e){
 
-
 let lector=new FileReader();
-
 
 lector.onload=function(){
 
-
 img.onload=function(){
-
 
 canvas.width=img.width;
 canvas.height=img.height;
-
 
 ctx.drawImage(img,0,0);
 
@@ -212,18 +162,13 @@ canvas.width,
 canvas.height
 );
 
-
 };
-
 
 img.src=lector.result;
 
-
 };
 
-
 lector.readAsDataURL(e.target.files[0]);
-
 
 });
 
@@ -231,13 +176,17 @@ lector.readAsDataURL(e.target.files[0]);
 
 
 
+document.getElementById("crear").addEventListener("click",function(){
+
 
 if(!original){
 
-alert("Carga una imagen primero");
+alert("Carga un tatuaje primero");
 return;
 
 }
+
+
 
 let datos=ctx.getImageData(
 0,
@@ -246,12 +195,22 @@ canvas.width,
 canvas.height
 );
 
+
 let salida=ctx.createImageData(
 canvas.width,
 canvas.height
 );
 
+
 let modo=document.getElementById("modo").value;
+
+let fuerza=
+document.getElementById("fuerza").value;
+
+
+let sombra=
+document.getElementById("sombra").value;
+
 
 
 for(let y=1;y<canvas.height-1;y++){
@@ -259,124 +218,17 @@ for(let y=1;y<canvas.height-1;y++){
 for(let x=1;x<canvas.width-1;x++){
 
 
-let pos=(y*canvas.width+x)*4;
+let p=(y*canvas.width+x)*4;
 
 
-let arriba=((y-1)*canvas.width+x)*4;
-let abajo=((y+1)*canvas.width+x)*4;
-let izquierda=(y*canvas.width+x-1)*4;
-let derecha=(y*canvas.width+x+1)*4;
+let gris=(
 
+datos.data[p]+
+datos.data[p+1]+
+datos.data[p+2]
 
-
-let centro=
-(
-datos.data[pos]+
-datos.data[pos+1]+
-datos.data[pos+2]
 )/3;
 
 
 
-let alrededor=
-(
-datos.data[arriba]+
-datos.data[abajo]+
-datos.data[izquierda]+
-datos.data[derecha]
-)/4;
-
-
-
-let borde=Math.abs(
-centro-alrededor
-);
-
-
-
-let negro=false;
-
-
-
-if(modo==="linea"){
-
-if(borde>18){
-negro=true;
-}
-
-}
-
-
-
-if(modo==="real"){
-
-if(borde>12 || centro<90){
-negro=true;
-}
-
-}
-
-
-
-if(modo==="dot"){
-
-if(centro<120 && Math.random()>0.45){
-negro=true;
-}
-
-}
-
-
-
-if(negro){
-
-salida.data[pos]=0;
-salida.data[pos+1]=0;
-salida.data[pos+2]=0;
-
-}else{
-
-salida.data[pos]=255;
-salida.data[pos+1]=255;
-salida.data[pos+2]=255;
-
-}
-
-
-salida.data[pos+3]=255;
-
-
-}
-
-}
-
-
-
-ctx.putImageData(
-salida,
-0,
-0
-);
-
-
-alert("Esténcil creado");
-
-
-if(!original){
-
-alert("Carga una imagen primero");
-return;
-
-}
-
-
-
-let datos=ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-let modo=document.get
+let arriba=((y-1)*canvas.width+x)*4
