@@ -5,17 +5,13 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Xua Tattoo AI</title>
 
 <link rel="stylesheet" href="style.css">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -24,49 +20,75 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 
 <body>
 
-<div class="backgroundGlow"></div>
+<!-- SPLASH -->
 
-<div class="phone">
+<div id="splash">
 
-<header>
-
-<button class="iconButton">
-
-<i class="fas fa-bars"></i>
-
-</button>
-
-<div>
+<div class="glow"></div>
 
 <h1>Xua Tattoo</h1>
 
-<p>Professional AI Studio</p>
+<p>PROFESSIONAL AI STENCIL STUDIO</p>
 
 </div>
 
-<button class="iconButton">
+<!-- APP -->
 
-<i class="fas fa-gear"></i>
+<div id="app">
+
+<!-- HEADER -->
+
+<header>
+
+<div class="topBar">
+
+<button>
+
+<i class="fa-solid fa-bars"></i>
 
 </button>
 
+<h2>Xua Tattoo</h2>
+
+<button>
+
+<i class="fa-solid fa-gear"></i>
+
+</button>
+
+</div>
+
 </header>
 
-<div class="preview">
+<!-- PREVIEW -->
+
+<section class="previewCard">
+
+<div class="previewBox">
 
 <img id="preview">
 
-<div class="placeholder">
+<div id="emptyPreview">
 
 <i class="fa-solid fa-image"></i>
 
-<p>Selecciona una imagen</p>
+<h3>Selecciona una imagen</h3>
+
+<p>Comienza creando un esténcil profesional.</p>
 
 </div>
 
+<canvas id="canvas"></canvas>
+
 </div>
 
-<label class="upload">
+</section>
+
+<!-- BOTÓN PRINCIPAL -->
+
+<section class="uploadSection">
+
+<label class="uploadButton">
 
 <input
 type="file"
@@ -80,17 +102,21 @@ Seleccionar Imagen
 
 </label>
 
-<section class="panel">
+</section>
 
-<h2>
+<!-- HERRAMIENTAS -->
+
+<section class="tools">
+
+<h3>
 
 Herramientas
 
-</h2>
+</h3>
 
 <div class="slider">
 
-<span>Grosor</span>
+<label>Grosor</label>
 
 <input type="range" id="lineSize">
 
@@ -98,7 +124,7 @@ Herramientas
 
 <div class="slider">
 
-<span>Contraste</span>
+<label>Contraste</label>
 
 <input type="range" id="contrast">
 
@@ -106,7 +132,7 @@ Herramientas
 
 <div class="slider">
 
-<span>Umbral</span>
+<label>Umbral</label>
 
 <input type="range" id="threshold">
 
@@ -114,7 +140,7 @@ Herramientas
 
 <div class="slider">
 
-<span>Dotwork</span>
+<label>Dotwork</label>
 
 <input type="range" id="dotDensity">
 
@@ -122,7 +148,7 @@ Herramientas
 
 <div class="slider">
 
-<span>Nitidez</span>
+<label>Nitidez</label>
 
 <input type="range" id="sharpness">
 
@@ -130,21 +156,15 @@ Herramientas
 
 </section>
 
-<div class="actions">
+<!-- BOTONES -->
+
+<section class="actions">
 
 <button id="createBtn">
 
 <i class="fa-solid fa-wand-magic-sparkles"></i>
 
 Crear Esténcil
-
-</button>
-
-<button id="aiBtn">
-
-<i class="fa-solid fa-brain"></i>
-
-Mejorar con IA
 
 </button>
 
@@ -156,7 +176,9 @@ Descargar PNG
 
 </button>
 
-</div>
+</section>
+
+<!-- MENÚ -->
 
 <nav>
 
@@ -168,30 +190,4 @@ Descargar PNG
 
 <button>
 
-<i class="fa-solid fa-pen"></i>
-
-</button>
-
-<button>
-
-<i class="fa-solid fa-robot"></i>
-
-</button>
-
-<button>
-
-<i class="fa-solid fa-user"></i>
-
-</button>
-
-</nav>
-
-<canvas id="canvas"></canvas>
-
-</div>
-
-<script src="app.js"></script>
-
-</body>
-
-</html>
+<i class="fa-solid fa-pen-r
