@@ -1,39 +1,16 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Xua Tattoo AI Pro</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="app">
-<header>
-<h1>XUA TATTOO AI <span>PRO</span></h1>
-<div>
-<button id="openImage">📂 Abrir Imagen</button>
-<button id="saveImage">💾 Descargar</button>
-<input type="file" id="fileInput" accept="image/*" hidden>
-</div>
-</header>
-
-<main>
-<aside class="tools">
-<h2>Herramientas</h2>
-<label>Contraste <input type="range" id="contrast" min="0" max="200" value="100"></label>
-<label>Grosor <input type="range" id="thickness" min="1" max="12" value="4"></label>
-<label>Dotwork <input type="range" id="dotwork" min="0" max="100" value="40"></label>
-<label>Limpieza <input type="range" id="clean" min="0" max="100" value="60"></label>
-<button id="createStencil">⚡ Crear Esténcil</button>
-<button id="compare">👁 Comparar</button>
-<button id="reset">🔄 Reiniciar</button>
-</aside>
-
-<section class="workspace">
+<h1>Xua Tattoo AI Pro</h1>
+<button id="openImage">Abrir imagen</button>
+<button id="createStencil">Crear esténcil</button>
+<button id="saveImage">Descargar</button>
+<input id="fileInput" type="file" accept="image/*" hidden>
 <canvas id="canvas"></canvas>
-</section>
-</main>
-</div>
 <script src="app.js"></script>
 <script src="stencil.js"></script>
 </body>
