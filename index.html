@@ -380,5 +380,257 @@ link.click();
 
 
 </script>
+  <script>
+
+let canvas=document.getElementById("canvas");
+let ctx=canvas.getContext("2d");
+
+let imagen=new Image();
+let original=null;
+
+
+document.getElementById("upload").onchange=function(e){
+
+let lector=new FileReader();
+
+lector.onload=function(){
+
+imagen.onload=function(){
+
+canvas.width=imagen.width;
+canvas.height=imagen.height;
+
+ctx.drawImage(imagen,0,0);
+
+original=ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+}
+
+imagen.src=lector.result;
+
+}
+
+lector.readAsDataURL(e.target.files[0]);
+
+}
+
+
+
+
+function crearStencil(){
+
+
+if(typeof cv==="undefined"){
+
+alert("Espera que cargue el motor de imagen");
+return;
+
+}
+
+
+
+let src=cv.imread(canvas);
+
+let gris=new cv.Mat();
+
+let bordes=new cv.Mat();
+
+
+
+cv.cvtColor(
+src,
+gris,
+cv.COLOR_RGBA2GRAY
+);
+
+
+
+// aumentar contraste
+
+let factor=document.getElementById("contrast").value;
+
+
+gris.convertTo(
+gris,
+-1,
+factor,
+0
+);
+
+
+
+// detectar líneas
+
+cv.Canny(
+gris,
+bordes,
+60,
+140
+);
+
+
+
+// engrosar líneas
+
+let grosor=document.getElementById("line").value;
+
+
+let kernel=cv.Mat.ones(
+grosor,
+grosor,
+cv.CV_8U
+);
+
+
+
+cv.dilate(
+bordes,
+bordes,
+kernel
+);
+
+
+
+// invertir para transferencia
+
+cv.bitwise_not(
+bordes,
+bordes
+);
+
+
+
+cv.imshow(
+canvas,
+bordes
+);
+
+
+
+// agregar puntos de sombra
+
+agregarPuntos();
+
+
+
+src.delete();
+gris.delete();
+bordes.delete();
+kernel.delete();
+
+
+}
+
+
+
+
+
+function agregarPuntos(){
+
+
+let cantidad=
+document.getElementById("dots").value;
+
+
+if(cantidad==0)return;
+
+
+ctx.fillStyle="black";
+
+
+for(
+let y=0;
+y<canvas.height;
+y+=15
+){
+
+
+for(
+let x=0;
+x<canvas.width;
+x+=15
+){
+
+
+let prob=Math.random();
+
+
+if(prob < cantidad/20){
+
+
+ctx.beginPath();
+
+ctx.arc(
+x,
+y,
+1.5,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+
+}
+
+
+}
+
+
+}
+
+
+}
+
+
+
+
+function limpiar(){
+
+
+if(original){
+
+ctx.putImageData(
+original,
+0,
+0
+);
+
+}
+
+
+}
+
+
+
+
+
+function descargar(){
+
+
+let link=document.createElement("a");
+
+link.download=
+"Xua_Tattoo_AI_Estencil.png";
+
+
+link.href=
+canvas.toDataURL(
+"image/png"
+);
+
+
+link.click();
+
+
+}
+
+
+  </script>
 </body>
 </html>
