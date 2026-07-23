@@ -5,111 +5,84 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Xua Tattoo AI Pro</title>
+<title>Xua Tattoo AI</title>
 
 <style>
 
-@import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
-
 body{
-margin:0;
-background:#050505;
-color:white;
-font-family:Arial,sans-serif;
-text-align:center;
-padding:20px;
+    margin:0;
+    background:#111;
+    color:white;
+    font-family:Arial,Helvetica,sans-serif;
+    text-align:center;
 }
 
+header{
+    padding:20px;
+    background:#000;
+    border-bottom:2px solid #333;
+}
 
 h1{
-font-family:'UnifrakturCook',serif;
-font-size:48px;
-margin:10px;
+    margin:0;
+    font-size:32px;
+    color:#fff;
 }
 
-
-.sub{
-color:#aaa;
-letter-spacing:4px;
+.container{
+    padding:20px;
 }
 
-
-.app{
-
-max-width:700px;
-margin:auto;
-background:#111;
-border:1px solid #333;
-border-radius:25px;
-padding:25px;
-
+input{
+    margin:20px;
+    padding:15px;
+    background:#222;
+    color:white;
+    border-radius:10px;
 }
-
-
-.panel{
-
-background:#080808;
-padding:15px;
-margin:15px 0;
-border-radius:15px;
-
-}
-
-
-select,input{
-
-padding:10px;
-background:#222;
-color:white;
-border-radius:10px;
-
-}
-
-
-.crear{
-
-width:90%;
-padding:20px;
-font-size:22px;
-font-weight:bold;
-background:#222;
-color:white;
-border:2px solid #777;
-border-radius:15px;
-
-}
-
 
 button{
-
-padding:12px;
-margin:5px;
-background:#181818;
-color:white;
-border:1px solid #555;
-border-radius:10px;
-font-weight:bold;
-
+    background:white;
+    color:black;
+    border:none;
+    padding:15px 25px;
+    margin:10px;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
 }
 
-
-#estado{
-
-color:#aaa;
-margin:15px;
-
+button:hover{
+    background:#ccc;
 }
-
 
 canvas{
-
-max-width:100%;
-background:white;
-margin-top:20px;
-border-radius:12px;
-
+    max-width:95%;
+    margin-top:20px;
+    background:white;
+    border-radius:10px;
 }
 
+.preview{
+    display:none;
+}
+
+.box{
+    background:#1b1b1b;
+    padding:20px;
+    border-radius:15px;
+    margin:auto;
+    max-width:600px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+}
+
+input[type=range]{
+    width:80%;
+}
 
 </style>
 
@@ -119,185 +92,197 @@ border-radius:12px;
 <body>
 
 
-<h1>XUA TATTOO AI</h1>
+<header>
 
-<div class="sub">
-BY: JUANSEC TATTOO - XUA INK STUDIO
-</div>
+<h1>Xua Tattoo AI</h1>
+<p>Generador profesional de esténcil</p>
 
-
-
-<div class="app">
+</header>
 
 
 
-<div class="panel">
-
-<h3>📷 Imagen</h3>
-
-<input type="file" id="foto" accept="image/*">
-
-</div>
+<div class="container">
 
 
+<div class="box">
 
 
-<div class="panel">
+<input type="file" id="upload" accept="image/*">
 
-<h3>⚔ Tipo de esténcil</h3>
-
-
-<select id="modo">
-
-<option value="linea">
-🖊 Línea profesional
-</option>
-
-<option value="real">
-🩶 Realista
-</option>
-
-<option value="dot">
-• Dotwork
-</option>
-
-
-</select>
-
-
-</div>
-
-
-
-
-<div class="panel">
-
-Detalle
 
 <br>
 
-<input type="range" id="detalle" min="5" max="80" value="25">
+
+<label>
+Grosor de línea
+</label>
+
+<input type="range" id="lineSize" min="1" max="8" value="3">
 
 
-<br><br>
+<label>
+Intensidad de puntos
+</label>
 
+<input type="range" id="dots" min="1" max="10" value="5">
 
-Sombra
 
 <br>
 
-<input type="range" id="sombra" min="1" max="10" value="5">
+
+<button onclick="crearStencil()">
+CREAR ESTÉNCIL
+</button>
+
+
+<button onclick="downloadImage()">
+DESCARGAR PNG
+</button>
 
 
 </div>
-
-
-
-
-<button class="crear" id="crear">
-
-🔥 CREAR ESTÉNCIL 🔥
-
-</button>
-
-
-<div id="estado">
-Esperando imagen...
-</div>
-
-
-
-<button id="limpiar">
-🧹 Restaurar
-</button>
-
-
-<button id="descargar">
-💾 Descargar
-</button>
 
 
 
 <canvas id="canvas"></canvas>
 
 
-</div><script>
+<img id="preview" class="preview">
 
-const canvas=document.getElementById("canvas");
-const ctx=canvas.getContext("2d");
 
-let imagen=new Image();
+</div>
+
+
+
+<script>
+
+
+let canvas=document.getElementById("canvas");
+let ctx=canvas.getContext("2d");
+
 let original=null;
 
 
+document.getElementById("upload").addEventListener("change",function(e){
 
-const estado=document.getElementById("estado");
+let file=e.target.files[0];
 
-
-
-document.getElementById("foto").addEventListener("change",function(e){
-
-let lector=new FileReader();
+if(!file)return;
 
 
-lector.onload=function(){
+let img=new Image();
 
-imagen.onload=function(){
+img.onload=function(){
 
-canvas.width=imagen.width;
-canvas.height=imagen.height;
+canvas.width=img.width;
+canvas.height=img.height;
 
+ctx.drawImage(img,0,0);
 
-ctx.drawImage(imagen,0,0);
-
-
-original=ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
+original=img;
 
 
-estado.innerHTML="Imagen cargada";
-
-};
+}
 
 
-imagen.src=lector.result;
-
-};
+img.src=URL.createObjectURL(file);
 
 
-lector.readAsDataURL(e.target.files[0]);
-
-});
-
-
+});// ===============================
+// MOTOR XUA TATTOO AI STENCIL
+// ===============================
 
 
-
-
-document.getElementById("crear").addEventListener("click",function(){
-
+function crearStencil(){
 
 if(!original){
-
-estado.innerHTML="Carga una imagen primero";
+alert("Primero sube una imagen");
 return;
+}
+
+
+let size=document.getElementById("lineSize").value;
+let dotPower=document.getElementById("dots").value;
+
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+
+let temp=document.createElement("canvas");
+let t=temp.getContext("2d");
+
+
+temp.width=original.width;
+temp.height=original.height;
+
+
+t.drawImage(original,0,0);
+
+
+let imgData=t.getImageData(
+0,
+0,
+temp.width,
+temp.height
+);
+
+
+let data=imgData.data;
+
+
+for(let i=0;i<data.length;i+=4){
+
+
+let r=data[i];
+let g=data[i+1];
+let b=data[i+2];
+
+
+let gray=(r+g+b)/3;
+
+
+
+// aumento de contraste
+
+gray=gray<140?0:255;
+
+
+
+data[i]=gray;
+data[i+1]=gray;
+data[i+2]=gray;
+
+
+}
+
+
+t.putImageData(imgData,0,0);
+
+
+
+ctx.drawImage(temp,0,0);
+
+
+
+dibujarLineas(size);
+
+
+crearPuntos(dotPower);
+
 
 }
 
 
 
-estado.innerHTML="Creando esténcil...";
+// ===============================
+// CREAR LINEAS MÁS FUERTES
+// ===============================
 
 
+function dibujarLineas(grosor){
 
-setTimeout(function(){
 
-
-let entrada=ctx.getImageData(
+let img=ctx.getImageData(
 0,
 0,
 canvas.width,
@@ -305,227 +290,191 @@ canvas.height
 );
 
 
-let salida=ctx.createImageData(
+let pix=img.data;
+
+
+
+ctx.clearRect(
+0,
+0,
 canvas.width,
 canvas.height
 );
 
 
+ctx.fillStyle="white";
 
-let modo=document.getElementById("modo").value;
-
-
-let detalle=
-Number(document.getElementById("detalle").value);
-
-
-let sombra=
-Number(document.getElementById("sombra").value);
-
-
-
-for(let y=1;y<canvas.height-1;y++){
-
-for(let x=1;x<canvas.width-1;x++){
-
-
-let p=(y*canvas.width+x)*4;
-
-
-
-let gris=(
-
-entrada.data[p]+
-entrada.data[p+1]+
-entrada.data[p+2]
-
-)/3;
-
-
-
-let vecinos=[
-
-((y-1)*canvas.width+x)*4,
-((y+1)*canvas.width+x)*4,
-(y*canvas.width+x-1)*4,
-(y*canvas.width+x+1)*4
-
-];
-
-
-
-let promedio=0;
-
-
-for(let v of vecinos){
-
-promedio+=(
-
-entrada.data[v]+
-entrada.data[v+1]+
-entrada.data[v+2]
-
-)/3;
-
-}
-
-
-promedio/=4;
-
-
-
-let borde=Math.abs(
-gris-promedio
-);
-
-
-
-let negro=false;
-
-
-
-// LINEAS
-if(modo==="linea"){
-
-if(borde>detalle){
-
-negro=true;
-
-}
-
-}
-
-
-
-// REALISTA
-
-if(modo==="real"){
-
-if(borde>detalle-8 || gris<100){
-
-negro=true;
-
-}
-
-}
-
-
-
-// DOTWORK
-
-if(modo==="dot"){
-
-if(gris<160){
-
-if(Math.random()<(sombra/10)){
-
-negro=true;
-
-}
-
-}
-
-}
-
-
-
-// negros profundos
-
-if(gris<45){
-
-negro=true;
-
-}
-
-
-
-
-if(negro){
-
-salida.data[p]=0;
-salida.data[p+1]=0;
-salida.data[p+2]=0;
-
-}else{
-
-salida.data[p]=255;
-salida.data[p+1]=255;
-salida.data[p+2]=255;
-
-}
-
-
-salida.data[p+3]=255;
-
-
-
-}
-
-}
-
-
-
-ctx.putImageData(
-salida,
+ctx.fillRect(
 0,
-0
-);
-
-
-
-estado.innerHTML="✅ Esténcil terminado";
-
-
-},100);
-
-
-});
-
-
-
-
-
-
-
-document.getElementById("limpiar").addEventListener("click",function(){
-
-
-if(original){
-
-ctx.putImageData(
-original,
 0,
-0
+canvas.width,
+canvas.height
 );
 
-estado.innerHTML="Imagen restaurada";
+
+ctx.strokeStyle="black";
+ctx.lineWidth=grosor;
+
+
+
+for(
+let y=1;
+y<canvas.height-1;
+y++
+){
+
+
+for(
+let x=1;
+x<canvas.width-1;
+x++
+){
+
+
+let pos=(y*canvas.width+x)*4;
+
+
+if(
+pix[pos]<80
+){
+
+
+ctx.beginPath();
+
+ctx.arc(
+x,
+y,
+grosor/2,
+0,
+Math.PI*2
+);
+
+ctx.fillStyle="black";
+
+ctx.fill();
+
+
 
 }
 
-});
+
+}
+
+
+}
+
+
+}
 
 
 
+// ===============================
+// SOMBRAS EN PUNTOS DOTWORK
+// ===============================
+
+
+function crearPuntos(intensidad){
+
+
+let paso=12-intensidad;
+
+
+ctx.fillStyle="black";
+
+
+for(
+let y=0;
+y<canvas.height;
+y+=paso
+){
+
+
+for(
+let x=0;
+x<canvas.width;
+x+=paso
+){
+
+
+let pixel=ctx.getImageData(
+x,
+y,
+1,
+1
+).data;
+
+
+if(pixel[0]<100){
+
+
+ctx.beginPath();
+
+ctx.arc(
+x,
+y,
+1.2,
+0,
+Math.PI*2
+);
+
+
+ctx.fill();
+
+
+}
+
+
+}
+
+
+}
+
+
+}
 
 
 
-
-document.getElementById("descargar").addEventListener("click",function(){
-
-
-let enlace=document.createElement("a");
+// ===============================
+// MOSTRAR RESULTADO
+// ===============================
 
 
-enlace.download="Xua_Tattoo_AI_Stencil.png";
+function showResult(){
+
+let img=document.getElementById("preview");
+
+img.src=canvas.toDataURL();
+
+img.style.display="block";
 
 
-enlace.href=canvas.toDataURL("image/png");
+}
 
 
-enlace.click();
+
+// ===============================
+// DESCARGAR ESTENCIL
+// ===============================
 
 
-});
+function downloadImage(){
+
+
+let link=document.createElement("a");
+
+
+link.download=
+"Xua_Tattoo_AI_Estencil.png";
+
+
+link.href=
+canvas.toDataURL();
+
+
+link.click();
+
+
+}
 
 
 
@@ -533,4 +482,5 @@ enlace.click();
 
 
 </body>
+
 </html>
