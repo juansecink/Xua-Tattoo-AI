@@ -5,7 +5,7 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <title>Xua Tattoo AI</title>
 
@@ -15,118 +15,113 @@
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<div class="app">
+<div class="backgroundGlow"></div>
+
+<div class="phone">
 
 <header>
 
-<h1 class="logo">Xua Tattoo</h1>
+<button class="iconButton">
 
-<p class="subtitle">Professional AI Stencil Creator</p>
+<i class="fas fa-bars"></i>
+
+</button>
+
+<div>
+
+<h1>Xua Tattoo</h1>
+
+<p>Professional AI Studio</p>
+
+</div>
+
+<button class="iconButton">
+
+<i class="fas fa-gear"></i>
+
+</button>
 
 </header>
 
-<section class="upload-card">
+<div class="preview">
 
-<h2>Subir Imagen</h2>
+<img id="preview">
 
-<input type="file" id="fileInput" accept="image/*">
+<div class="placeholder">
 
-</section>
+<i class="fa-solid fa-image"></i>
 
-<section class="preview-card">
-
-<h2>Vista Previa</h2>
-
-<img id="preview" alt="Vista previa">
-
-<canvas id="canvas"></canvas>
-
-</section>
-
-<section class="tools-card">
-
-<h2>Herramientas</h2>
-
-<div class="tool">
-
-<label>Grosor de línea</label>
-
-<input type="range" id="lineSize" min="1" max="10" value="3">
+<p>Selecciona una imagen</p>
 
 </div>
 
-<div class="tool">
+</div>
 
-<label>Contraste</label>
+<label class="upload">
 
-<input type="range" id="contrast" min="0" max="200" value="100">
+<input
+type="file"
+id="fileInput"
+accept="image/*"
+hidden>
+
+<i class="fa-solid fa-camera"></i>
+
+Seleccionar Imagen
+
+</label>
+
+<section class="panel">
+
+<h2>
+
+Herramientas
+
+</h2>
+
+<div class="slider">
+
+<span>Grosor</span>
+
+<input type="range" id="lineSize">
 
 </div>
 
-<div class="tool">
+<div class="slider">
 
-<label>Umbral</label>
+<span>Contraste</span>
 
-<input type="range" id="threshold" min="0" max="255" value="120">
-
-</div>
-
-<div class="tool">
-
-<label>Puntillismo</label>
-
-<input type="range" id="dotDensity" min="0" max="100" value="40">
+<input type="range" id="contrast">
 
 </div>
 
-<div class="tool">
+<div class="slider">
 
-<label>Suavizado</label>
+<span>Umbral</span>
 
-<input type="range" id="smooth" min="0" max="100" value="50">
-
-</div>
-
-</section>
-
-<section class="buttons">
-
-<button id="createBtn">
-
-Crear Esténcil
-
-</button>
-
-<button id="downloadBtn">
-
-Descargar PNG
-
-</button>
-
-</section>
-
-<nav class="bottom-menu">
-
-<button>🏠 Inicio</button>
-
-<button>✒ Esténcil</button>
-
-<button>🤖 IA</button>
-
-<button>⚙ Ajustes</button>
-
-</nav>
+<input type="range" id="threshold">
 
 </div>
 
-<script src="app.js"></script>
+<div class="slider">
 
-</body>
+<span>Dotwork</span>
 
-</html>
+<input type="range" id="dotDensity">
+
+</div>
+
+<div class="slider">
+
+<span>Nitidez</span>
+
+<input type="range" id="
