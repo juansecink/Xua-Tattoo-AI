@@ -4,190 +4,25 @@
 <head>
 
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Xua Tattoo AI</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
 <link rel="stylesheet" href="style.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<!-- SPLASH -->
+<!-- Pantalla de inicio -->
 
-<div id="splash">
+<div id="splashScreen">
 
-<div class="glow"></div>
-
-<h1>Xua Tattoo</h1>
-
-<p>PROFESSIONAL AI STENCIL STUDIO</p>
-
-</div>
-
-<!-- APP -->
-
-<div id="app">
-
-<!-- HEADER -->
-
-<header>
-
-<div class="topBar">
-
-<button>
-
-<i class="fa-solid fa-bars"></i>
-
-</button>
-
-<h2>Xua Tattoo</h2>
-
-<button>
-
-<i class="fa-solid fa-gear"></i>
-
-</button>
-
-</div>
-
-</header>
-
-<!-- PREVIEW -->
-
-<section class="previewCard">
-
-<div class="previewBox">
-
-<img id="preview">
-
-<div id="emptyPreview">
-
-<i class="fa-solid fa-image"></i>
-
-<h3>Selecciona una imagen</h3>
-
-<p>Comienza creando un esténcil profesional.</p>
-
-</div>
-
-<canvas id="canvas"></canvas>
-
-</div>
-
-</section>
-
-<!-- BOTÓN PRINCIPAL -->
-
-<section class="uploadSection">
-
-<label class="uploadButton">
-
-<input
-type="file"
-id="fileInput"
-accept="image/*"
-hidden>
-
-<i class="fa-solid fa-camera"></i>
-
-Seleccionar Imagen
-
-</label>
-
-</section>
-
-<!-- HERRAMIENTAS -->
-
-<section class="tools">
-
-<h3>
-
-Herramientas
-
-</h3>
-
-<div class="slider">
-
-<label>Grosor</label>
-
-<input type="range" id="lineSize">
-
-</div>
-
-<div class="slider">
-
-<label>Contraste</label>
-
-<input type="range" id="contrast">
-
-</div>
-
-<div class="slider">
-
-<label>Umbral</label>
-
-<input type="range" id="threshold">
-
-</div>
-
-<div class="slider">
-
-<label>Dotwork</label>
-
-<input type="range" id="dotDensity">
-
-</div>
-
-<div class="slider">
-
-<label>Nitidez</label>
-
-<input type="range" id="sharpness">
-
-</div>
-
-</section>
-
-<!-- BOTONES -->
-
-<section class="actions">
-
-<button id="createBtn">
-
-<i class="fa-solid fa-wand-magic-sparkles"></i>
-
-Crear Esténcil
-
-</button>
-
-<button id="downloadBtn">
-
-<i class="fa-solid fa-download"></i>
-
-Descargar PNG
-
-</button>
-
-</section>
-
-<!-- MENÚ -->
-
-<nav>
-
-<button>
-
-<i class="fa-solid fa-house"></i>
-
-</button>
-
-<button>
-
-<i class="fa-solid fa-pen-r
+<div class="logoContainer">
