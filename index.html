@@ -22,20 +22,15 @@ padding:20px;
 
 
 h1{
-
 font-family:'UnifrakturCook',serif;
 font-size:48px;
 margin:10px;
-
 }
 
 
 .sub{
-
 color:#aaa;
 letter-spacing:4px;
-font-size:14px;
-
 }
 
 
@@ -47,7 +42,6 @@ background:#111;
 border:1px solid #333;
 border-radius:25px;
 padding:25px;
-box-shadow:0 0 30px #000;
 
 }
 
@@ -55,20 +49,19 @@ box-shadow:0 0 30px #000;
 .panel{
 
 background:#080808;
-border-radius:15px;
 padding:15px;
 margin:15px 0;
+border-radius:15px;
 
 }
 
 
-
-input,select{
+select,input{
 
 padding:10px;
-border-radius:10px;
 background:#222;
 color:white;
+border-radius:10px;
 
 }
 
@@ -76,14 +69,13 @@ color:white;
 .crear{
 
 width:90%;
-padding:18px;
+padding:20px;
 font-size:22px;
 font-weight:bold;
 background:#222;
 color:white;
 border:2px solid #777;
 border-radius:15px;
-cursor:pointer;
 
 }
 
@@ -92,19 +84,19 @@ button{
 
 padding:12px;
 margin:5px;
-border-radius:10px;
-background:#1a1a1a;
+background:#181818;
 color:white;
 border:1px solid #555;
+border-radius:10px;
 font-weight:bold;
-cursor:pointer;
 
 }
 
 
-button:hover{
+#estado{
 
-background:#333;
+color:#aaa;
+margin:15px;
 
 }
 
@@ -112,8 +104,8 @@ background:#333;
 canvas{
 
 max-width:100%;
-margin-top:20px;
 background:white;
+margin-top:20px;
 border-radius:12px;
 
 }
@@ -130,17 +122,18 @@ border-radius:12px;
 <h1>XUA TATTOO AI</h1>
 
 <div class="sub">
- CREA TU ESTENCIL FACIL Y RAPIDO
- BY: JUANSEC TATTOO - XUA INK STUDIO.
+PRO STENCIL ENGINE
 </div>
+
 
 
 <div class="app">
 
 
+
 <div class="panel">
 
-<h3>📷 Cargar tatuaje</h3>
+<h3>📷 Imagen</h3>
 
 <input type="file" id="foto" accept="image/*">
 
@@ -148,14 +141,16 @@ border-radius:12px;
 
 
 
+
 <div class="panel">
 
-<h3>⚔ Modo de esténcil</h3>
+<h3>⚔ Tipo de esténcil</h3>
+
 
 <select id="modo">
 
 <option value="linea">
-🖊 Línea limpia
+🖊 Línea profesional
 </option>
 
 <option value="real">
@@ -166,38 +161,50 @@ border-radius:12px;
 • Dotwork
 </option>
 
+
 </select>
 
+
 </div>
+
 
 
 
 <div class="panel">
 
-<label>
-Fuerza de línea
+Detalle
+
 <br>
-<input type="range" id="fuerza" min="10" max="80" value="30">
-</label>
+
+<input type="range" id="detalle" min="5" max="80" value="25">
+
 
 <br><br>
 
-<label>
+
 Sombra
+
 <br>
+
 <input type="range" id="sombra" min="1" max="10" value="5">
-</label>
+
 
 </div>
 
 
 
+
 <button class="crear" id="crear">
+
 🔥 CREAR ESTÉNCIL 🔥
+
 </button>
 
 
-<br>
+<div id="estado">
+Esperando imagen...
+</div>
+
 
 
 <button id="limpiar">
@@ -219,21 +226,78 @@ Sombra
 const canvas=document.getElementById("canvas");
 const ctx=canvas.getContext("2d");
 
-let img=new Image();
+let imagen=new Image();
 let original=null;
+
+
+
+const estado=document.getElementById("estado");
+
+
+
+document.getElementById("foto").addEventListener("change",function(e){
+
+let lector=new FileReader();
+
+
+lector.onload=function(){
+
+imagen.onload=function(){
+
+canvas.width=imagen.width;
+canvas.height=imagen.height;
+
+
+ctx.drawImage(imagen,0,0);
+
+
+original=ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+estado.innerHTML="Imagen cargada";
+
+};
+
+
+imagen.src=lector.result;
+
+};
+
+
+lector.readAsDataURL(e.target.files[0]);
+
+});
+
+
+
+
 
 
 document.getElementById("crear").addEventListener("click",function(){
 
+
 if(!original){
 
-alert("Carga un tatuaje primero");
+estado.innerHTML="Carga una imagen primero";
 return;
 
 }
 
 
-let imgData=ctx.getImageData(
+
+estado.innerHTML="Creando esténcil...";
+
+
+
+setTimeout(function(){
+
+
+let entrada=ctx.getImageData(
 0,
 0,
 canvas.width,
@@ -247,12 +311,16 @@ canvas.height
 );
 
 
+
 let modo=document.getElementById("modo").value;
 
 
-let fuerza=Number(
-document.getElementById("fuerza").value
-);
+let detalle=
+Number(document.getElementById("detalle").value);
+
+
+let sombra=
+Number(document.getElementById("sombra").value);
 
 
 
@@ -263,194 +331,13 @@ for(let x=1;x<canvas.width-1;x++){
 
 let p=(y*canvas.width+x)*4;
 
-
-
-let actual=(
-
-imgData.data[p]+
-imgData.data[p+1]+
-imgData.data[p+2]
-
-)/3;
-
-
-
-let arriba=((y-1)*canvas.width+x)*4;
-let abajo=((y+1)*canvas.width+x)*4;
-let izquierda=(y*canvas.width+x-1)*4;
-let derecha=(y*canvas.width+x+1)*4;
-
-
-
-let promedio=(
-
-(
-imgData.data[arriba]+
-imgData.data[arriba+1]+
-imgData.data[arriba+2]
-)/3
-
-+
-
-(
-imgData.data[abajo]+
-imgData.data[abajo+1]+
-imgData.data[abajo+2]
-)/3
-
-+
-
-(
-imgData.data[izquierda]+
-imgData.data[izquierda+1]+
-imgData.data[izquierda+2]
-)/3
-
-+
-
-(
-imgData.data[derecha]+
-imgData.data[derecha+1]+
-imgData.data[derecha+2]
-)/3
-
-)/4;
-
-
-
-let borde=Math.abs(actual-promedio);
-
-
-
-let negro=false;
-
-
-
-// MODO LÍNEA
-if(modo==="linea"){
-
-if(borde>fuerza){
-
-negro=true;
-
-}
-
-}
-
-
-// MODO REALISTA
-if(modo==="real"){
-
-if(borde>fuerza-8 || actual<85){
-
-negro=true;
-
-}
-
-}
-
-
-// MODO DOTWORK
-if(modo==="dot"){
-
-if(actual<160 && Math.random()>0.45){
-
-negro=true;
-
-}
-
-}
-
-
-
-// refuerzo de negros
-if(actual<45){
-
-negro=true;
-
-}
-
-
-
-if(negro){
-
-salida.data[p]=0;
-salida.data[p+1]=0;
-salida.data[p+2]=0;
-
-}else{
-
-salida.data[p]=255;
-salida.data[p+1]=255;
-salida.data[p+2]=255;
-
-}
-
-
-salida.data[p+3]=255;
-
-
-}
-
-}
-
-
-
-ctx.putImageData(
-salida,
-0,
-0
-);
-
-
-alert("Esténcil profesional creado");
-
-
-});
-
-if(!original){
-
-alert("Carga un tatuaje primero");
-return;
-
-}
-
-
-let datos=ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-
-let salida=ctx.createImageData(
-canvas.width,
-canvas.height
-);
-
-
-let modo=document.getElementById("modo").value;
-
-
-let fuerza=
-Number(document.getElementById("fuerza").value);
-
-
-
-for(let y=1;y<canvas.height-1;y++){
-
-for(let x=1;x<canvas.width-1;x++){
-
-
-let p=(y*canvas.width+x)*4;
 
 
 let gris=(
 
-datos.data[p]+
-datos.data[p+1]+
-datos.data[p+2]
+entrada.data[p]+
+entrada.data[p+1]+
+entrada.data[p+2]
 
 )/3;
 
@@ -467,26 +354,29 @@ let vecinos=[
 
 
 
-let diferencia=0;
+let promedio=0;
 
 
-for(let n of vecinos){
+for(let v of vecinos){
 
-let g=(
+promedio+=(
 
-datos.data[n]+
-datos.data[n+1]+
-datos.data[n+2]
+entrada.data[v]+
+entrada.data[v+1]+
+entrada.data[v+2]
 
 )/3;
-
-
-diferencia+=Math.abs(gris-g);
 
 }
 
 
-diferencia=diferencia/4;
+promedio/=4;
+
+
+
+let borde=Math.abs(
+gris-promedio
+);
 
 
 
@@ -494,36 +384,40 @@ let negro=false;
 
 
 
-// LÍNEA LIMPIA
+// LINEAS
 if(modo==="linea"){
 
-if(diferencia>fuerza){
+if(borde>detalle){
 
 negro=true;
 
 }
 
 }
+
 
 
 // REALISTA
+
 if(modo==="real"){
 
-if(diferencia>fuerza-10 || gris<100){
+if(borde>detalle-8 || gris<100){
 
 negro=true;
 
 }
 
 }
+
 
 
 // DOTWORK
+
 if(modo==="dot"){
 
-if(gris<150){
+if(gris<160){
 
-if(Math.random()>0.55){
+if(Math.random()<(sombra/10)){
 
 negro=true;
 
@@ -532,6 +426,17 @@ negro=true;
 }
 
 }
+
+
+
+// negros profundos
+
+if(gris<45){
+
+negro=true;
+
+}
+
 
 
 
@@ -553,6 +458,7 @@ salida.data[p+2]=255;
 salida.data[p+3]=255;
 
 
+
 }
 
 }
@@ -566,45 +472,14 @@ salida,
 );
 
 
-alert("Esténcil profesional creado");
+
+estado.innerHTML="✅ Esténcil terminado";
+
+
+},100);
 
 
 });
-document.getElementById("foto").addEventListener("change",function(e){
-
-let lector=new FileReader();
-
-lector.onload=function(){
-
-img.onload=function(){
-
-canvas.width=img.width;
-canvas.height=img.height;
-
-ctx.drawImage(img,0,0);
-
-
-original=ctx.getImageData(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-};
-
-img.src=lector.result;
-
-};
-
-lector.readAsDataURL(e.target.files[0]);
-
-});
-
-
-
-
-
 
 
 
@@ -623,6 +498,8 @@ original,
 0
 );
 
+estado.innerHTML="Imagen restaurada";
+
 }
 
 });
@@ -633,20 +510,23 @@ original,
 
 
 
-
 document.getElementById("descargar").addEventListener("click",function(){
 
 
-let link=document.createElement("a");
+let enlace=document.createElement("a");
 
-link.download="Xua_Tattoo_AI_Stencil.png";
 
-link.href=canvas.toDataURL("image/png");
+enlace.download="Xua_Tattoo_AI_Stencil.png";
 
-link.click();
+
+enlace.href=canvas.toDataURL("image/png");
+
+
+enlace.click();
 
 
 });
+
 
 
 </script>
