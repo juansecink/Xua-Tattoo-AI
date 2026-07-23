@@ -1,109 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xua Tattoo AI Pro</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <!-- OpenCV -->
-    <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xua Tattoo AI Pro</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
 <div class="app">
+<header>
+<h1>XUA TATTOO AI <span>PRO</span></h1>
+<div>
+<button id="openImage">📂 Abrir Imagen</button>
+<button id="saveImage">💾 Descargar</button>
+<input type="file" id="fileInput" accept="image/*" hidden>
+</div>
+</header>
 
-    <!-- Barra superior -->
-    <header>
+<main>
+<aside class="tools">
+<h2>Herramientas</h2>
+<label>Contraste <input type="range" id="contrast" min="0" max="200" value="100"></label>
+<label>Grosor <input type="range" id="thickness" min="1" max="12" value="4"></label>
+<label>Dotwork <input type="range" id="dotwork" min="0" max="100" value="40"></label>
+<label>Limpieza <input type="range" id="clean" min="0" max="100" value="60"></label>
+<button id="createStencil">⚡ Crear Esténcil</button>
+<button id="compare">👁 Comparar</button>
+<button id="reset">🔄 Reiniciar</button>
+</aside>
 
-        <div class="logo">
-            <h1>XUA TATTOO AI <span>PRO</span></h1>
-            <p>Motor Inteligente para Esténciles</p>
-        </div>
-
-        <div class="header-buttons">
-
-            <button id="openImage">
-                📂 Abrir Imagen
-            </button>
-
-            <button id="saveImage">
-                💾 Descargar
-            </button>
-
-        </div>
-
-    </header>
-
-    <!-- Contenido -->
-    <main>
-
-        <!-- Panel izquierdo -->
-        <aside class="tools">
-
-            <h2>Herramientas</h2>
-
-            <div class="tool">
-
-                <label>Contraste</label>
-
-                <input
-                type="range"
-                id="contrast"
-                min="0"
-                max="200"
-                value="100">
-
-            </div>
-
-            <div class="tool">
-
-                <label>Grosor</label>
-
-                <input
-                type="range"
-                id="thickness"
-                min="1"
-                max="12"
-                value="4">
-
-            </div>
-
-            <div class="tool">
-
-                <label>Dotwork</label>
-
-                <input
-                type="range"
-                id="dotwork"
-                min="0"
-                max="100"
-                value="40">
-
-            </div>
-
-            <div class="tool">
-
-                <label>Limpieza</label>
-
-                <input
-                type="range"
-                id="clean"
-                min="0"
-                max="100"
-                value="60">
-
-            </div>
-
-            <button id="createStencil">
-                ⚡ Crear Esténcil
-            </button>
-
-            <button id="compare">
-                👁 Comparar
-            </button>
-
-            <button id="reset">
-                🔄 Reiniciar
+<section class="workspace">
+<canvas id="canvas"></canvas>
+</section>
+</main>
+</div>
+<script src="app.js"></script>
+<script src="stencil.js"></script>
+</body>
+</html>
