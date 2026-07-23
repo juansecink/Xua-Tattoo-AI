@@ -233,6 +233,189 @@ return;
 }
 
 
+let imgData=ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+let salida=ctx.createImageData(
+canvas.width,
+canvas.height
+);
+
+
+let modo=document.getElementById("modo").value;
+
+
+let fuerza=Number(
+document.getElementById("fuerza").value
+);
+
+
+
+for(let y=1;y<canvas.height-1;y++){
+
+for(let x=1;x<canvas.width-1;x++){
+
+
+let p=(y*canvas.width+x)*4;
+
+
+
+let actual=(
+
+imgData.data[p]+
+imgData.data[p+1]+
+imgData.data[p+2]
+
+)/3;
+
+
+
+let arriba=((y-1)*canvas.width+x)*4;
+let abajo=((y+1)*canvas.width+x)*4;
+let izquierda=(y*canvas.width+x-1)*4;
+let derecha=(y*canvas.width+x+1)*4;
+
+
+
+let promedio=(
+
+(
+imgData.data[arriba]+
+imgData.data[arriba+1]+
+imgData.data[arriba+2]
+)/3
+
++
+
+(
+imgData.data[abajo]+
+imgData.data[abajo+1]+
+imgData.data[abajo+2]
+)/3
+
++
+
+(
+imgData.data[izquierda]+
+imgData.data[izquierda+1]+
+imgData.data[izquierda+2]
+)/3
+
++
+
+(
+imgData.data[derecha]+
+imgData.data[derecha+1]+
+imgData.data[derecha+2]
+)/3
+
+)/4;
+
+
+
+let borde=Math.abs(actual-promedio);
+
+
+
+let negro=false;
+
+
+
+// MODO LÍNEA
+if(modo==="linea"){
+
+if(borde>fuerza){
+
+negro=true;
+
+}
+
+}
+
+
+// MODO REALISTA
+if(modo==="real"){
+
+if(borde>fuerza-8 || actual<85){
+
+negro=true;
+
+}
+
+}
+
+
+// MODO DOTWORK
+if(modo==="dot"){
+
+if(actual<160 && Math.random()>0.45){
+
+negro=true;
+
+}
+
+}
+
+
+
+// refuerzo de negros
+if(actual<45){
+
+negro=true;
+
+}
+
+
+
+if(negro){
+
+salida.data[p]=0;
+salida.data[p+1]=0;
+salida.data[p+2]=0;
+
+}else{
+
+salida.data[p]=255;
+salida.data[p+1]=255;
+salida.data[p+2]=255;
+
+}
+
+
+salida.data[p+3]=255;
+
+
+}
+
+}
+
+
+
+ctx.putImageData(
+salida,
+0,
+0
+);
+
+
+alert("Esténcil profesional creado");
+
+
+});
+
+if(!original){
+
+alert("Carga un tatuaje primero");
+return;
+
+}
+
+
 let datos=ctx.getImageData(
 0,
 0,
