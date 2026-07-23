@@ -11,9 +11,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 <link rel="stylesheet" href="style.css">
 
@@ -21,8 +22,208 @@
 
 <body>
 
-<!-- Pantalla de inicio -->
+<!-- Splash Screen -->
 
-<div id="splashScreen">
+<div id="splash">
 
-<div class="logoContainer">
+<div class="logoBox">
+
+<h1>Xua Tattoo</h1>
+
+<p>AI STENCIL STUDIO</p>
+
+</div>
+
+</div>
+
+<!-- Fondo -->
+
+<div class="background"></div>
+
+<!-- Aplicación -->
+
+<div id="app">
+
+<!-- Header -->
+
+<header>
+
+<button id="menuButton">
+
+<i class="fa-solid fa-bars"></i>
+
+</button>
+
+<div class="title">
+
+<h2>Xua Tattoo</h2>
+
+<span>Professional AI</span>
+
+</div>
+
+<button id="settingsButton">
+
+<i class="fa-solid fa-gear"></i>
+
+</button>
+
+</header>
+
+<!-- Vista previa -->
+
+<section class="preview">
+
+<div class="imageContainer">
+
+<img id="preview">
+
+<div id="empty">
+
+<i class="fa-regular fa-image"></i>
+
+<h3>Selecciona una imagen</h3>
+
+<p>Crea un esténcil profesional.</p>
+
+</div>
+
+<canvas id="canvas"></canvas>
+
+</div>
+
+</section>
+
+<!-- Acciones -->
+
+<section class="actions">
+
+<label class="uploadButton">
+
+<input
+type="file"
+id="fileInput"
+accept="image/*"
+hidden>
+
+<i class="fa-solid fa-camera"></i>
+
+<span>Seleccionar Imagen</span>
+
+</label>
+
+<button id="createBtn">
+
+<i class="fa-solid fa-wand-magic-sparkles"></i>
+
+Crear Esténcil
+
+</button>
+
+<button id="downloadBtn">
+
+<i class="fa-solid fa-download"></i>
+
+Descargar PNG
+
+</button>
+
+</section>
+
+<!-- Herramientas -->
+
+<section class="tools">
+
+<div class="toolHeader">
+
+<h3>Herramientas</h3>
+
+<i class="fa-solid fa-sliders"></i>
+
+</div>
+
+<div class="tool">
+
+<label>Grosor</label>
+
+<input type="range" id="lineSize" min="1" max="10" value="3">
+
+</div>
+
+<div class="tool">
+
+<label>Contraste</label>
+
+<input type="range" id="contrast" min="0" max="200" value="100">
+
+</div>
+
+<div class="tool">
+
+<label>Umbral</label>
+
+<input type="range" id="threshold" min="0" max="255" value="120">
+
+</div>
+
+<div class="tool">
+
+<label>Dotwork</label>
+
+<input type="range" id="dotDensity" min="0" max="100" value="40">
+
+</div>
+
+<div class="tool">
+
+<label>Nitidez</label>
+
+<input type="range" id="sharpness" min="0" max="100" value="50">
+
+</div>
+
+</section>
+
+<!-- Barra inferior -->
+
+<nav>
+
+<button class="active">
+
+<i class="fa-solid fa-house"></i>
+
+</button>
+
+<button>
+
+<i class="fa-solid fa-pen-ruler"></i>
+
+</button>
+
+<button>
+
+<i class="fa-solid fa-brain"></i>
+
+</button>
+
+<button>
+
+<i class="fa-solid fa-folder"></i>
+
+</button>
+
+<button>
+
+<i class="fa-solid fa-user"></i>
+
+</button>
+
+</nav>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
