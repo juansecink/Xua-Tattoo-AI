@@ -1,107 +1,149 @@
-/* =====================================
-   XUA TATTOO AI - PREMIUM UI
-===================================== */
+/* =====================================================
+   XUA TATTOO AI
+   PREMIUM UI v1.0
+===================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root{
+
+--bg:#050505;
+--card:#101010;
+--card2:#181818;
+--white:#ffffff;
+--gray:#9d9d9d;
+--border:rgba(255,255,255,.08);
+
+}
 
 *{
+
 margin:0;
 padding:0;
 box-sizing:border-box;
+
+}
+
+html{
+
+scroll-behavior:smooth;
+
 }
 
 body{
 
-background:
-radial-gradient(circle at top,#1b1b1b 0%,#050505 40%,#000 100%);
+font-family:'Poppins',sans-serif;
 
-font-family:"Poppins",sans-serif;
+background:
+radial-gradient(circle at top,#202020 0%,#0b0b0b 35%,#000 100%);
 
 color:white;
+
+min-height:100vh;
 
 overflow-x:hidden;
 
 }
 
-/* ---------------- Splash ---------------- */
+/* =========================
+   Fondo animado
+========================= */
+
+.background{
+
+position:fixed;
+
+width:100%;
+height:100%;
+
+left:0;
+top:0;
+
+background:
+
+radial-gradient(circle at 20% 20%,
+rgba(255,255,255,.04),
+transparent 30%),
+
+radial-gradient(circle at 80% 70%,
+rgba(255,255,255,.03),
+transparent 30%);
+
+z-index:-2;
+
+}
+
+/* =========================
+   Splash
+========================= */
 
 #splash{
 
 position:fixed;
 
-top:0;
 left:0;
+top:0;
 
 width:100%;
 height:100vh;
 
-display:flex;
+background:#000;
 
-flex-direction:column;
+display:flex;
 
 justify-content:center;
 
 align-items:center;
 
-background:black;
-
 z-index:9999;
 
-animation:fadeOut 3s forwards;
+animation:fadeOut 1.2s ease forwards;
 
-animation-delay:2s;
-
-}
-
-.glow{
-
-position:absolute;
-
-width:260px;
-height:260px;
-
-border-radius:50%;
-
-background:white;
-
-filter:blur(120px);
-
-opacity:.15;
-
-animation:pulse 3s infinite;
+animation-delay:2.3s;
 
 }
 
-#splash h1{
+.logoBox{
 
-font-family:"Cinzel",serif;
+text-align:center;
 
-font-size:64px;
+animation:zoomLogo 1.5s ease;
 
-letter-spacing:4px;
+}
 
-z-index:5;
+.logoBox h1{
+
+font-family:'Great Vibes',cursive;
+
+font-size:74px;
+
+font-weight:400;
+
+color:white;
 
 text-shadow:
-0 0 15px rgba(255,255,255,.5);
+
+0 0 10px rgba(255,255,255,.5),
+
+0 0 30px rgba(255,255,255,.15);
 
 }
 
-#splash p{
+.logoBox p{
 
-margin-top:15px;
+margin-top:12px;
 
-letter-spacing:8px;
+letter-spacing:6px;
 
 font-size:13px;
 
-color:#bbb;
-
-z-index:5;
+color:#bbbbbb;
 
 }
 
-/* ---------------- App ---------------- */
+/* =========================
+   Contenedor principal
+========================= */
 
 #app{
 
@@ -109,15 +151,17 @@ max-width:520px;
 
 margin:auto;
 
-padding:25px;
+padding:22px;
 
 padding-bottom:120px;
 
 }
 
-/* ---------------- Header ---------------- */
+/* =========================
+   Header Premium
+========================= */
 
-.topBar{
+header{
 
 display:flex;
 
@@ -125,94 +169,72 @@ justify-content:space-between;
 
 align-items:center;
 
-margin-bottom:25px;
+margin-bottom:28px;
 
 }
 
-.topBar h2{
-
-font-family:"Cinzel",serif;
-
-font-size:30px;
-
-letter-spacing:2px;
-
-}
-
-.topBar button{
-
-background:rgba(255,255,255,.05);
-
-border:1px solid rgba(255,255,255,.08);
+header button{
 
 width:48px;
 
 height:48px;
 
-border-radius:15px;
+border:none;
+
+border-radius:16px;
+
+background:rgba(255,255,255,.05);
+
+backdrop-filter:blur(15px);
+
+border:1px solid var(--border);
 
 color:white;
 
-font-size:18px;
+font-size:19px;
 
-backdrop-filter:blur(20px);
+cursor:pointer;
 
-}
-
-/* ---------------- Preview ---------------- */
-
-.previewCard{
-
-margin-bottom:25px;
+transition:.30s;
 
 }
 
-.previewBox{
+header button:hover{
 
-height:420px;
+transform:scale(1.08);
 
-border-radius:30px;
-
-background:
-
-linear-gradient(145deg,#171717,#0c0c0c);
-
-border:1px solid rgba(255,255,255,.08);
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-overflow:hidden;
-
-position:relative;
-
-box-shadow:
-
-0 20px 60px rgba(0,0,0,.5);
+background:rgba(255,255,255,.09);
 
 }
 
-#preview{
-
-width:100%;
-
-display:none;
-
-}
-
-#emptyPreview{
+.title{
 
 text-align:center;
 
-color:#777;
+}
+
+.title h2{
+
+font-family:'Great Vibes',cursive;
+
+font-size:48px;
+
+font-weight:400;
+
+color:white;
 
 }
 
-#emptyPreview i{
+.title span{
 
-font-size:80px;
+display:block;
 
-margin-bottom
+margin-top:-4px;
+
+font-size:12px;
+
+letter-spacing:4px;
+
+color:#bdbdbd;
+
+}
