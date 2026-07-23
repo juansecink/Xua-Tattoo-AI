@@ -1,23 +1,25 @@
-// =============================
-// Xua Tattoo AI Pro
-// app.js
-// =============================
+// =====================================
+// XUA TATTOO AI PRO
+// APP.JS V2
+// =====================================
 
-const fileInput = document.getElementById("fileInput");
-const openImage = document.getElementById("openImage");
-const saveImage = document.getElementById("saveImage");
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+// Variables globales
+window.fileInput = document.getElementById("fileInput");
+window.openImage = document.getElementById("openImage");
+window.saveImage = document.getElementById("saveImage");
 
-let currentImage = null;
+window.canvas = document.getElementById("canvas");
+window.ctx = window.canvas.getContext("2d");
 
-// Abrir selector
-openImage.addEventListener("click", () => {
-    fileInput.click();
+window.currentImage = null;
+
+// Abrir explorador
+window.openImage.addEventListener("click", () => {
+    window.fileInput.click();
 });
 
 // Cargar imagen
-fileInput.addEventListener("change", (event) => {
+window.fileInput.addEventListener("change", function (event) {
 
     const file = event.target.files[0];
 
@@ -25,38 +27,56 @@ fileInput.addEventListener("change", (event) => {
 
     const reader = new FileReader();
 
-    reader.onload = function(e){
+    reader.onload = function (e) {
 
         const img = new Image();
 
-        img.onload = function(){
+        img.onload = function () {
 
-            currentImage = img;
+            window.currentImage = img;
 
-            canvas.width = img.width;
-            canvas.height = img.height;
+            window.canvas.width = img.width;
+            window.canvas.height = img.height;
 
-            ctx.clearRect(0,0,canvas.width,canvas.height);
-            ctx.drawImage(img,0,0);
+            window.ctx.clearRect(
+                0,
+                0,
+                window.canvas.width,
+                window.canvas.height
+            );
 
-        }
+            window.ctx.drawImage(
+                img,
+                0,
+                0
+            );
+
+        };
 
         img.src = e.target.result;
 
-    }
+    };
 
     reader.readAsDataURL(file);
 
 });
 
-// Descargar
-saveImage.addEventListener("click", () => {
+// Descargar imagen
+window.saveImage.addEventListener("click", function () {
+
+    if (!window.currentImage) {
+
+        alert("Primero carga una imagen.");
+
+        return;
+
+    }
 
     const link = document.createElement("a");
 
     link.download = "XuaTattooAI.png";
 
-    link.href = canvas.toDataURL("image/png");
+    link.href = window.canvas.toDataURL("image/png");
 
     link.click();
 
