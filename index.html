@@ -1,110 +1,309 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Xua Tattoo AI</title>
 
 <style>
+
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
+
 body{
-background:#080808;
+margin:0;
+background:#050505;
 color:white;
 font-family:Arial;
 text-align:center;
 padding:20px;
 }
 
-.box{
+h1{
+font-family:'UnifrakturCook',serif;
+font-size:45px;
+letter-spacing:3px;
+margin-bottom:5px;
+}
+
+.sub{
+color:#aaa;
+letter-spacing:4px;
+font-size:14px;
+}
+
+
+.app{
+
 max-width:650px;
 margin:auto;
-background:#151515;
-padding:20px;
-border-radius:20px;
+background:#111;
+border:1px solid #333;
+border-radius:25px;
+padding:25px;
+box-shadow:0 0 30px #000;
+
 }
 
-button{
-padding:12px;
-margin:5px;
-border-radius:10px;
-border:none;
-font-weight:bold;
+
+.panel{
+
+background:#080808;
+padding:15px;
+border-radius:15px;
+margin:15px 0;
+
 }
+
 
 input{
+
 margin:10px;
+color:white;
+
 }
 
-canvas{
-max-width:100%;
-background:white;
-margin-top:20px;
+
+button{
+
+background:#1a1a1a;
+color:white;
+border:1px solid #555;
+padding:13px;
+margin:6px;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+
 }
+
+
+button:hover{
+
+background:#333;
+
+}
+
+
+canvas{
+
+max-width:100%;
+margin-top:20px;
+background:white;
+border-radius:12px;
+
+}
+
 </style>
 
 </head>
 
+
 <body>
 
-<h1>🔥 Xua Tattoo AI 🔥</h1>
 
-<div class="box">
+<h1>XUA TATTOO AI</h1>
+
+<div class="sub">
+BLACKLETTER STENCIL STUDIO
+</div>
+
+
+
+<div class="app">
+
+
+<div class="panel">
+
+
+<h3>📂 Cargar Diseño</h3>
 
 <input type="file" id="foto" accept="image/*">
 
-<br>
-
-<label>
-Fuerza línea
-<input type="range" id="linea" min="5" max="80" value="25">
-</label>
-
-<br>
-
-<label>
-Sombras
-<input type="range" id="sombra" min="1" max="10" value="5">
-</label>
-
-<br>
-
-<button id="pro">
-🖊 ESTÉNCIL PRO
-</button>
-
-<button id="real">
-🩶 REALISTA
-</button>
-
-<button id="dot">
-• DOTWORK
-</button>
-
-<button id="reset">
-🧹 LIMPIAR
-</button>
-
-<button id="invert">
-🔄 INVERTIR
-</button>
-
-<button id="save">
-💾 DESCARGAR
-</button>
-
-<canvas id="canvas"></canvas>
 
 </div>
 
 
+
+<div class="panel">
+
+
+<h3>⚔ Herramientas</h3>
+
+
+<button id="crear">
+🖊 CREAR ESTÉNCIL
+</button>
+
+
+<button id="limpiar">
+🧹 RESTAURAR
+</button>
+
+
+<button id="invertir">
+🔄 INVERTIR
+</button>
+
+
+<button id="descargar">
+💾 GUARDAR PNG
+</button>
+
+
+</div>
+
+
+
+<canvas id="canvas"></canvas>
+
+
+</div>
+
+
+
+
+
 <script>
 
+
 const canvas=document.getElementById("canvas");
+
 const ctx=canvas.getContext("2d");
 
-let img=new Image();
+
+let imagen=new Image();
+
 let original=null;
 
 
 
-document.getElementById("foto").on
+
+
+document.getElementById("foto").addEventListener("change",function(e){
+
+
+let lector=new FileReader();
+
+
+lector.onload=function(){
+
+
+imagen.onload=function(){
+
+
+canvas.width=imagen.width;
+
+canvas.height=imagen.height;
+
+
+ctx.drawImage(imagen,0,0);
+
+
+
+original=ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+
+};
+
+
+
+imagen.src=lector.result;
+
+
+};
+
+
+
+lector.readAsDataURL(e.target.files[0]);
+
+
+});
+
+
+
+
+
+
+
+document.getElementById("crear").addEventListener("click",function(){
+
+
+if(!original){
+
+alert("Carga un tatuaje primero");
+
+return;
+
+}
+
+
+
+let datos=ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+
+
+for(let i=0;i<datos.data.length;i+=4){
+
+
+let gris=(
+
+datos.data[i]+
+datos.data[i+1]+
+datos.data[i+2]
+
+)/3;
+
+
+
+if(gris<150){
+
+
+datos.data[i]=0;
+datos.data[i+1]=0;
+datos.data[i+2]=0;
+
+
+}else{
+
+
+datos.data[i]=255;
+datos.data[i+1]=255;
+datos.data[i+2]=255;
+
+
+}
+
+
+}
+
+
+
+ctx.putImageData(datos,0,0);
+
+
+
+alert("Esténcil creado");
+
+
+});
+
+
+
+
+
+
+
+document.getElementById("limpiar").addEventListener("click",
